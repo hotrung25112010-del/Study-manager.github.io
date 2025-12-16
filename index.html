@@ -3,613 +3,2478 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Study Manager — Quản lý học tập cá nhân (Mở rộng)</title>
+  <title>Study Manager Pro — Quản lý học tập thông minh</title>
   <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --muted:#9aa7bf; --accent:#60a5fa; --accent-2:#7c3aed;
-      --glass: rgba(255,255,255,0.03); --success:#34d399; --danger:#fb7185; --radius:14px;
-      --max-width:1200px; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    :root {
+      --bg: #0a0f1a;
+      --bg-card: #111827;
+      --bg-secondary: #1e293b;
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --primary-dark: #4f46e5;
+      --secondary: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 20px 40px rgba(0,0,0,0.3);
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --glass: rgba(255,255,255,0.03);
+      --gradient: linear-gradient(135deg, var(--primary), var(--primary-light));
+      --gradient-dark: linear-gradient(135deg, var(--primary-dark), var(--primary));
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg) 0%, #071028 100%);color:#e6eef8}
-    .container{max-width:var(--max-width);margin:28px auto;padding:20px}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    .brand{display:flex;gap:14px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 6px 20px rgba(124,58,237,0.18)}
-    .brand h1{font-size:18px;margin:0}
-    .brand p{margin:0;font-size:12px;color:var(--muted)}
-    nav{display:flex;gap:8px}
-    .chip{background:var(--glass);padding:8px 12px;border-radius:999px;font-size:13px;color:var(--muted);cursor:pointer}
-    .app{display:grid;grid-template-columns:320px 1fr 360px;gap:18px}
-    @media (max-width:1000px){.app{grid-template-columns:1fr;}}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:var(--radius);box-shadow:0 6px 24px rgba(2,6,23,0.6)}
-    .card h2{margin:0 0 12px 0;font-size:16px}
-    .muted{color:var(--muted);font-size:13px}
-    input[type=text], input[type=date], input[type=time], input[type=number], select, textarea{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:10px;border-radius:10px;color:inherit}
-    .row{display:flex;gap:8px}
-    button{background:var(--accent);border:none;padding:10px 12px;border-radius:10px;color:#04283a;cursor:pointer;font-weight:600}
-    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
-    .task-list{margin-top:12px;display:flex;flex-direction:column;gap:8px;max-height:40vh;overflow:auto;padding-right:6px}
-    .task{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
-    .task .title{font-weight:600}
-    .task small{color:var(--muted)}
-    .icons{margin-left:auto;display:flex;gap:8px}
-    .icon-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:8px}
-    .stats{display:flex;gap:12px;margin-bottom:14px}
-    .stat{flex:1;padding:12px;border-radius:12px;background:linear-gradient(90deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01))}
-    .progress{background:rgba(255,255,255,0.04);height:10px;border-radius:999px;overflow:hidden}
-    .progress > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
-    .planner{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:1000px){.planner{grid-template-columns:1fr}}
-    .notes textarea{min-height:120px}
-    .timer{display:flex;flex-direction:column;align-items:center;gap:10px}
-    .big-time{font-size:42px;font-weight:700}
-    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-    .tag{padding:6px 8px;border-radius:999px;font-size:12px;background:rgba(255,255,255,0.02)}
-    .empty{color:var(--muted);text-align:center;padding:16px}
-    .banner{padding:10px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));margin-bottom:12px}
-    a { color: var(--accent); text-decoration: none }
-    .small-muted{font-size:12px;color:var(--muted)}
-    .danger{color:var(--danger)}
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    
+    body {
+      background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+                  var(--bg);
+      background-attachment: fixed;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 22px;
+      color: white;
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .logo::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    }
+    
+    .brand-text h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--text), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .brand-text p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .btn-icon:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    /* Main Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr 320px;
+      gap: 24px;
+    }
+    
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+    
+    .card:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+      transform: translateY(-4px);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .card-title i {
+      color: var(--primary);
+    }
+    
+    .card-badge {
+      background: var(--gradient);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    /* Form Elements */
+    .input-group {
+      margin-bottom: 16px;
+    }
+    
+    .input-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+    }
+    
+    .input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      font-size: 15px;
+      transition: var(--transition);
+    }
+    
+    .input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    
+    .input-row {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .btn {
+      padding: 14px 24px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--gradient-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    }
+    
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--bg);
+      transform: translateY(-2px);
+    }
+    
+    .btn-sm {
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+    
+    /* Task List */
+    .task-list {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    
+    .task-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .task-list::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+    }
+    
+    .task-list::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 10px;
+    }
+    
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+    
+    .task-item:hover {
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+    
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .task-checkbox.checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    .task-content {
+      flex: 1;
+    }
+    
+    .task-title {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .task-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 12px;
+    }
+    
+    .task-priority {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .priority-high {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+    
+    .priority-medium {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+    
+    .priority-low {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--secondary);
+    }
+    
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .task-item:hover .task-actions {
+      opacity: 1;
+    }
+    
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .action-btn:hover {
+      background: var(--primary);
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 8px 0;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    /* Progress */
+    .progress-container {
+      margin-top: 24px;
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    
+    .progress-bar {
+      height: 10px;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 10px;
+      transition: width 1s ease;
+    }
+    
+    /* Timer */
+    .timer-container {
+      text-align: center;
+      padding: 20px;
+      background: var(--gradient);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+    }
+    
+    .timer-display {
+      font-size: 56px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      margin: 20px 0;
+      color: white;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .timer-mode {
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+    }
+    
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    /* Week Chart */
+    .week-chart {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    
+    .day-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .day-bar {
+      width: 100%;
+      background: var(--gradient);
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+    
+    .day-bar:hover {
+      opacity: 0.8;
+      transform: scaleY(1.1);
+    }
+    
+    .day-label {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    /* Empty States */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+    
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--primary);
+      z-index: 1000;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+      max-width: 350px;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .notification-content {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-content {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.active .modal-content {
+      transform: scale(1);
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+      
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .header-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .dashboard-grid {
+        gap: 16px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .timer-display {
+        font-size: 42px;
+      }
+      
+      .input-row {
+        flex-direction: column;
+      }
+    }
+    
+    /* Animation */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.5s ease forwards;
+    }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
+    <!-- Header -->
     <header>
       <div class="brand">
-        <div class="logo">SM</div>
-        <div>
-          <h1>Study Manager</h1>
-          <p>Quản lý học tập cá nhân — lên kế hoạch, thời khóa biểu, theo dõi tiến độ</p>
+        <div class="logo">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <div class="brand-text">
+          <h1>Study Manager Pro</h1>
+          <p>Hệ thống quản lý học tập thông minh thế hệ mới</p>
         </div>
       </div>
-      <nav>
-        <div class="chip">Dashboard</div>
-        <div class="chip">Tasks</div>
-        <div class="chip">Notes</div>
-      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" id="theme-toggle" title="Đổi giao diện">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="btn-icon" id="export-btn" title="Xuất dữ liệu">
+          <i class="fas fa-download"></i>
+        </button>
+        <button class="btn-icon" id="help-btn" title="Trợ giúp">
+          <i class="fas fa-question-circle"></i>
+        </button>
+        <button class="btn-icon" id="user-btn" title="Tài khoản">
+          <i class="fas fa-user"></i>
+        </button>
+      </div>
     </header>
-
-    <main class="app">
-      <!-- LEFT: Tasks & TKB quick -->
-      <aside class="card sidebar">
-        <h2>Tạo nhiệm vụ nhanh</h2>
-        <div class="add-task">
-          <input id="task-title" type="text" placeholder="Tên nhiệm vụ (ví dụ: Ôn Toán chương 2)" />
-          <div class="row">
-            <input id="task-date" type="date" />
-            <select id="task-priority">
-              <option value="low">Thấp</option>
-              <option value="medium" selected>Trung bình</option>
-              <option value="high">Cao</option>
-            </select>
+    
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Left Column: Tasks & Quick Actions -->
+      <div>
+        <!-- Task Creation -->
+        <div class="card slide-in" style="animation-delay: 0.1s">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-plus-circle"></i> Tạo nhiệm vụ mới</h2>
+            <span class="card-badge">Nhanh</span>
           </div>
-          <div class="row">
-            <input id="task-est" type="text" placeholder="Thời lượng (30 phút)" />
-            <button id="add-task">Thêm</button>
+          
+          <div class="input-group">
+            <label class="input-label">Tiêu đề nhiệm vụ</label>
+            <input type="text" class="input" id="task-title" placeholder="Ôn tập Toán chương 3...">
           </div>
-        </div>
-
-        <h2 style="margin-top:12px">Danh sách nhiệm vụ</h2>
-        <div id="task-list" class="task-list">
-          <div class="empty">Chưa có nhiệm vụ — thêm nhiệm vụ ở trên</div>
-        </div>
-
-        <hr style="margin:12px 0;border:0;border-top:1px dashed rgba(255,255,255,0.03)" />
-
-        <h2>Thời khóa biểu (nhanh)</h2>
-        <div class="small-muted">Thêm môn cho từng thứ</div>
-        <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
-          <select id="tkb-day">
-            <option value="1">Thứ 2</option><option value="2">Thứ 3</option><option value="3">Thứ 4</option>
-            <option value="4">Thứ 5</option><option value="5">Thứ 6</option><option value="6">Thứ 7</option>
-            <option value="0">Chủ nhật</option>
-          </select>
-          <input id="tkb-subject" placeholder="Tên môn (ví dụ: Toán)" />
-          <div class="row">
-            <input id="tkb-time" type="time" />
-            <button id="add-tkb">Thêm</button>
-          </div>
-          <div id="tkb-list" class="small-muted" style="max-height:160px; overflow:auto"></div>
-        </div>
-      </aside>
-
-      <!-- MAIN: Stats, planner, notes, pomodoro, study session -->
-      <section>
-        <div id="banner-area"></div>
-
-        <div class="card">
-          <div class="stats">
-            <div class="stat">
-              <div class="muted">Tổng nhiệm vụ</div>
-              <div style="font-size:20px;font-weight:700;margin-top:6px" id="stat-total">0</div>
-            </div>
-            <div class="stat">
-              <div class="muted">Hoàn thành</div>
-              <div style="font-size:20px;font-weight:700;margin-top:6px" id="stat-done">0</div>
-            </div>
-            <div class="stat">
-              <div class="muted">Tiến độ</div>
-              <div style="margin-top:8px" class="progress"><i id="progress-bar" style="width:0%"></i></div>
-            </div>
-          </div>
-
-          <div class="planner">
-            <div>
-              <h2>Kế hoạch hôm nay</h2>
-              <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-                <input id="planner-date" type="date" />
-                <button id="load-today" class="btn-ghost">Xem</button>
+          
+          <div class="input-group">
+            <div class="input-row">
+              <div style="flex: 1">
+                <label class="input-label">Hạn hoàn thành</label>
+                <input type="date" class="input" id="task-date">
               </div>
-              <div id="planner-list"></div>
-
-              <div style="margin-top:12px;border-top:1px dashed rgba(255,255,255,0.03);padding-top:12px">
-                <h2>Thêm vào kế hoạch</h2>
-                <input id="plan-title" type="text" placeholder="Việc cần làm" />
-                <div class="row" style="margin-top:8px">
-                  <input id="plan-time" type="time" />
-                  <button id="add-plan">Thêm vào kế hoạch</button>
+              <div style="flex: 1">
+                <label class="input-label">Độ ưu tiên</label>
+                <select class="input" id="task-priority">
+                  <option value="low">Thấp</option>
+                  <option value="medium" selected>Trung bình</option>
+                  <option value="high">Cao</option>
+                  <option value="urgent">Khẩn cấp</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <div class="input-row">
+              <div style="flex: 1">
+                <label class="input-label">Thời lượng</label>
+                <input type="text" class="input" id="task-est" placeholder="45 phút">
+              </div>
+              <button class="btn btn-primary" id="add-task" style="align-self: flex-end">
+                <i class="fas fa-plus"></i> Thêm
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Task List -->
+        <div class="card slide-in" style="animation-delay: 0.2s; margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-tasks"></i> Nhiệm vụ hiện tại</h2>
+            <div class="input-row" style="gap: 8px">
+              <button class="btn-secondary btn-sm" id="filter-today">Hôm nay</button>
+              <button class="btn-secondary btn-sm" id="filter-high">Ưu tiên</button>
+            </div>
+          </div>
+          
+          <div class="task-list" id="task-list">
+            <!-- Tasks will be inserted here -->
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i class="fas fa-clipboard-list"></i>
+              </div>
+              <p>Chưa có nhiệm vụ nào</p>
+              <p class="text-muted" style="font-size: 14px; margin-top: 8px">Thêm nhiệm vụ đầu tiên của bạn</p>
+            </div>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-header">
+              <span>Tiến độ tổng thể</span>
+              <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Quick Schedule -->
+        <div class="card slide-in" style="animation-delay: 0.3s; margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-calendar-alt"></i> Thời khóa biểu</h2>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Thêm môn học</label>
+            <div class="input-row">
+              <select class="input" id="tkb-day" style="flex: 1">
+                <option value="1">Thứ 2</option>
+                <option value="2">Thứ 3</option>
+                <option value="3">Thứ 4</option>
+                <option value="4">Thứ 5</option>
+                <option value="5">Thứ 6</option>
+                <option value="6">Thứ 7</option>
+                <option value="0">Chủ nhật</option>
+              </select>
+              <input type="text" class="input" id="tkb-subject" placeholder="Tên môn" style="flex: 1">
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <div class="input-row">
+              <input type="time" class="input" id="tkb-time" style="flex: 1">
+              <button class="btn btn-primary" id="add-tkb">
+                <i class="fas fa-plus"></i> Thêm
+              </button>
+            </div>
+          </div>
+          
+          <div id="tkb-list" style="margin-top: 16px; max-height: 200px; overflow-y: auto;">
+            <!-- TKB items will be inserted here -->
+            <div class="empty-state" style="padding: 20px 0">
+              <i class="fas fa-calendar-plus" style="font-size: 24px; opacity: 0.5"></i>
+              <p style="margin-top: 8px; font-size: 14px">Chưa có thời khóa biểu</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Center Column: Main Dashboard -->
+      <div>
+        <!-- Stats Banner -->
+        <div class="card slide-in" style="animation-delay: 0.1s">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <i class="fas fa-tasks" style="color: var(--primary); font-size: 24px"></i>
+              <div class="stat-value" id="stat-total">0</div>
+              <div class="stat-label">Tổng nhiệm vụ</div>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-check-circle" style="color: var(--secondary); font-size: 24px"></i>
+              <div class="stat-value" id="stat-done">0</div>
+              <div class="stat-label">Đã hoàn thành</div>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-chart-line" style="color: var(--warning); font-size: 24px"></i>
+              <div class="stat-value" id="stat-progress">0%</div>
+              <div class="stat-label">Tiến độ</div>
+            </div>
+          </div>
+          
+          <!-- Week Chart -->
+          <div style="margin-top: 24px">
+            <h3 class="card-title"><i class="fas fa-chart-bar"></i> Hoạt động tuần này</h3>
+            <div class="week-chart" id="week-chart">
+              <!-- Week chart bars will be inserted here -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Timer & Study Session -->
+        <div class="card slide-in" style="animation-delay: 0.2s; margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-clock"></i> Bộ hẹn giờ Pomodoro</h2>
+            <span class="card-badge pulse">Đang chờ</span>
+          </div>
+          
+          <div class="timer-container">
+            <div class="timer-mode" id="timer-mode">Chu kỳ làm việc</div>
+            <div class="timer-display" id="timer-display">25:00</div>
+            <div class="timer-controls">
+              <button class="btn btn-primary" id="start-timer">
+                <i class="fas fa-play"></i> Bắt đầu
+              </button>
+              <button class="btn btn-secondary" id="pause-timer">
+                <i class="fas fa-pause"></i> Tạm dừng
+              </button>
+              <button class="btn btn-secondary" id="reset-timer">
+                <i class="fas fa-redo"></i> Đặt lại
+              </button>
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <div class="input-row">
+              <div style="flex: 1">
+                <label class="input-label">Thời gian làm việc (phút)</label>
+                <input type="number" class="input" id="work-min" min="1" max="120" value="25">
+              </div>
+              <div style="flex: 1">
+                <label class="input-label">Thời gian nghỉ (phút)</label>
+                <input type="number" class="input" id="break-min" min="1" max="60" value="5">
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 24px">
+            <h3 class="card-title"><i class="fas fa-book-open"></i> Phiên học theo môn</h3>
+            <div class="input-group">
+              <div class="input-row">
+                <input type="text" class="input" id="study-subject" placeholder="Tên môn học" style="flex: 2">
+                <input type="number" class="input" id="study-min" placeholder="Phút" min="5" style="flex: 1">
+                <button class="btn btn-primary" id="add-study-time">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div id="study-plan" style="margin-top: 16px">
+              <!-- Study plan items will be inserted here -->
+            </div>
+            
+            <div class="input-row" style="margin-top: 16px; gap: 12px">
+              <button class="btn btn-primary" id="start-study" style="flex: 1">
+                <i class="fas fa-play-circle"></i> Bắt đầu phiên học
+              </button>
+              <button class="btn btn-secondary" id="stop-study" style="flex: 1">
+                <i class="fas fa-stop-circle"></i> Dừng lại
+              </button>
+            </div>
+            
+            <div id="study-timer" style="margin-top: 16px; text-align: center; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius-md);">
+              <i class="fas fa-hourglass-start" style="margin-right: 8px"></i>
+              <span>Chưa có phiên học đang chạy</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Notes & Planner -->
+        <div class="card slide-in" style="animation-delay: 0.3s; margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-sticky-note"></i> Ghi chú & Kế hoạch</h2>
+            <button class="btn-secondary btn-sm" id="clear-notes">
+              <i class="fas fa-trash-alt"></i> Xóa
+            </button>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Kế hoạch hôm nay</label>
+            <div class="input-row">
+              <input type="date" class="input" id="planner-date" style="flex: 1">
+              <button class="btn btn-secondary" id="load-today">Hôm nay</button>
+            </div>
+          </div>
+          
+          <div id="planner-list" style="margin-top: 16px; min-height: 80px;">
+            <!-- Planner items will be inserted here -->
+          </div>
+          
+          <div class="input-group" style="margin-top: 24px">
+            <label class="input-label">Thêm vào kế hoạch</label>
+            <div class="input-row">
+              <input type="text" class="input" id="plan-title" placeholder="Việc cần làm" style="flex: 1">
+              <input type="time" class="input" id="plan-time" style="flex: 1">
+              <button class="btn btn-primary" id="add-plan">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="input-group" style="margin-top: 24px">
+            <label class="input-label">Ghi chú nhanh</label>
+            <textarea class="input" id="notes-area" rows="4" placeholder="Ghi chú, công thức, ý tưởng..."></textarea>
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; margin-top: 16px">
+            <span class="text-muted" style="font-size: 14px">Lưu tự động vào trình duyệt</span>
+            <button class="btn btn-primary" id="save-notes">
+              <i class="fas fa-save"></i> Lưu ghi chú
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Column: Schedule & Evaluation -->
+      <div>
+        <!-- Full Schedule -->
+        <div class="card slide-in" style="animation-delay: 0.1s">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-calendar-week"></i> Thời khóa biểu đầy đủ</h2>
+          </div>
+          
+          <div id="tkb-full" style="margin-top: 16px">
+            <!-- Full schedule will be inserted here -->
+            <div class="empty-state">
+              <i class="fas fa-calendar" style="font-size: 32px; opacity: 0.5"></i>
+              <p style="margin-top: 12px">Chưa có thời khóa biểu</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Self Evaluation -->
+        <div class="card slide-in" style="animation-delay: 0.2s; margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-clipboard-check"></i> Tự đánh giá & Bài tập</h2>
+            <span class="card-badge">Quan trọng</span>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Tên bài tập / Nhiệm vụ</label>
+            <input type="text" class="input" id="eval-title" placeholder="Bài tập Toán chương 3">
+          </div>
+          
+          <div class="input-group">
+            <div class="input-row">
+              <div style="flex: 1">
+                <label class="input-label">Hạn nộp</label>
+                <input type="date" class="input" id="eval-date">
+              </div>
+              <button class="btn btn-primary" id="add-eval" style="align-self: flex-end">
+                <i class="fas fa-plus"></i> Thêm
+              </button>
+            </div>
+          </div>
+          
+          <div id="eval-list" style="margin-top: 16px">
+            <!-- Evaluation items will be inserted here -->
+            <div class="empty-state">
+              <i class="fas fa-clipboard" style="font-size: 24px; opacity: 0.5"></i>
+              <p style="margin-top: 8px">Chưa có bài tập</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Support Links -->
+        <div class="card slide-in" style="animation-delay: 0.3s; margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-life-ring"></i> Tài liệu hỗ trợ</h2>
+          </div>
+          
+          <div id="support-links" style="margin-top: 16px">
+            <!-- Support links will be inserted here -->
+            <div class="empty-state">
+              <i class="fas fa-link" style="font-size: 24px; opacity: 0.5"></i>
+              <p style="margin-top: 8px">Chưa có liên kết hỗ trợ</p>
+              <p class="text-muted" style="font-size: 14px; margin-top: 4px">Bắt đầu phiên học để xem tài liệu</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Quick Tips -->
+        <div class="card slide-in" style="animation-delay: 0.4s; margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-lightbulb"></i> Mẹo học tập</h2>
+          </div>
+          
+          <div style="margin-top: 16px">
+            <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white">
+                  <i class="fas fa-clock"></i>
                 </div>
+                <div style="font-weight: 600">Phương pháp Pomodoro</div>
               </div>
+              <p style="font-size: 14px; color: var(--text-muted)">Học 25 phút, nghỉ 5 phút. Sau 4 chu kỳ, nghỉ dài 15-30 phút.</p>
             </div>
-
-            <div>
-              <h2>Ghi chú nhanh</h2>
-              <div class="notes">
-                <textarea id="notes-area" placeholder="Ghi chú, công thức, ý tưởng..."></textarea>
-                <div style="display:flex;gap:8px;margin-top:8px;justify-content:space-between">
-                  <div class="muted">Lưu tự động vào trình duyệt</div>
-                  <div>
-                    <button id="clear-notes" class="btn-ghost">Xóa</button>
-                    <button id="save-notes">Lưu</button>
-                  </div>
+            
+            <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--secondary); display: flex; align-items: center; justify-content: center; color: white">
+                  <i class="fas fa-tasks"></i>
                 </div>
+                <div style="font-weight: 600">Ưu tiên nhiệm vụ</div>
               </div>
-
-              <hr style="margin:12px 0;border:0;border-top:1px dashed rgba(255,255,255,0.03)" />
-
-              <h2>Bộ hẹn giờ (Pomodoro)</h2>
-              <div class="timer">
-                <div class="big-time" id="timer-display">25:00</div>
-                <div class="muted">Chu kì: <span id="timer-mode">Làm việc</span></div>
-                <div class="timer-controls">
-                  <button id="start-timer">Bắt đầu</button>
-                  <button id="pause-timer" class="btn-ghost">Tạm dừng</button>
-                  <button id="reset-timer" class="btn-ghost">Đặt lại</button>
+              <p style="font-size: 14px; color: var(--text-muted)">Hoàn thành nhiệm vụ quan trọng trước khi chuyển sang việc khác.</p>
+            </div>
+            
+            <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md)">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--warning); display: flex; align-items: center; justify-content: center; color: white">
+                  <i class="fas fa-brain"></i>
                 </div>
-                <div style="display:flex;gap:8px;margin-top:8px">
-                  <input id="work-min" type="number" min="1" max="120" value="25" style="width:80px" />
-                  <input id="break-min" type="number" min="1" max="60" value="5" style="width:80px" />
-                </div>
+                <div style="font-weight: 600">Ôn tập khoa học</div>
               </div>
-
-              <hr style="margin:12px 0;border:0;border-top:1px dashed rgba(255,255,255,0.03)" />
-
-              <h2>Thời gian học theo môn</h2>
-              <div class="small-muted">Đặt thời gian cho từng môn — tổng phải từ 1h (60 phút) đến 4h (240 phút)</div>
-              <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-                <input id="study-subject" placeholder="Tên môn (Ví dụ: Toán)" />
-                <input id="study-min" type="number" placeholder="Phút" min="5" style="width:120px" />
-                <button id="add-study-time">Thêm</button>
-              </div>
-              <div id="study-plan" style="margin-top:8px" class="small-muted"></div>
-              <div style="display:flex;gap:8px;margin-top:8px">
-                <button id="start-study">Bắt đầu học</button>
-                <button id="stop-study" class="btn-ghost">Dừng</button>
-              </div>
-              <div id="study-timer" style="margin-top:10px" class="muted">Chưa có phiên học</div>
-              <div id="support-links" style="margin-top:8px"></div>
-
+              <p style="font-size: 14px; color: var(--text-muted)">Ôn lại kiến thức sau 1 ngày, 1 tuần và 1 tháng để ghi nhớ lâu.</p>
             </div>
           </div>
         </div>
-
-        <footer class="card" style="margin-top:12px">
-          <div class="muted">Lưu ý: Dữ liệu được lưu trong trình duyệt (localStorage). Mở bằng Visual Studio Code -> Lưu file .html -> Mở với Live Server để trải nghiệm đầy đủ.</div>
-        </footer>
-      </section>
-
-      <!-- RIGHT: Filters, Week chart, TKB full, Self-eval -->
-      <aside class="card">
-        <h2>Bộ lọc & Thống kê</h2>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button id="filter-all" class="btn-ghost">Tất cả</button>
-          <button id="filter-today" class="btn-ghost">Hôm nay</button>
-          <button id="filter-high" class="btn-ghost">Ưu tiên cao</button>
-        </div>
-
-        <hr style="margin:12px 0;border:0;border-top:1px dashed rgba(255,255,255,0.03)" />
-
-        <h2>Tiến trình tuần</h2>
-        <div id="week-chart" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px"></div>
-
-        <hr style="margin:12px 0;border:0;border-top:1px dashed rgba(255,255,255,0.03)" />
-
-        <h2>Thời khóa biểu đầy đủ</h2>
-        <div id="tkb-full" style="font-size:13px;margin-top:8px"></div>
-
-        <hr style="margin:12px 0;border:0;border-top:1px dashed rgba(255,255,255,0.03)" />
-
-        <h2>Tự đánh giá & Bài tập</h2>
-        <input id="eval-title" type="text" placeholder="Tên bài tập / BT" />
-        <input id="eval-date" type="date" />
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button id="add-eval">Thêm</button>
-        </div>
-        <div id="eval-list" style="margin-top:8px"></div>
-      </aside>
-    </main>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+      <p>Study Manager Pro © 2023 | Dữ liệu được lưu trong trình duyệt của bạn</p>
+      <p style="margin-top: 8px; font-size: 13px">
+        <i class="fas fa-code" style="margin-right: 4px"></i> Mở bằng VS Code -> Lưu file .html -> Mở với Live Server để trải nghiệm đầy đủ
+      </p>
+    </footer>
   </div>
-
+  
+  <!-- Notification Container -->
+  <div id="notification-container"></div>
+  
+  <!-- Modal -->
+  <div class="modal" id="help-modal">
+    <div class="modal-content">
+      <div class="card-header" style="margin-bottom: 24px">
+        <h2 class="card-title"><i class="fas fa-question-circle"></i> Hướng dẫn sử dụng</h2>
+        <button class="btn-icon" id="close-help">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div style="margin-bottom: 16px">
+        <h3 style="margin-bottom: 12px">Các tính năng chính:</h3>
+        <ul style="padding-left: 20px; color: var(--text-muted); line-height: 1.6">
+          <li><strong>Quản lý nhiệm vụ:</strong> Thêm, sửa, xóa và theo dõi tiến độ nhiệm vụ học tập</li>
+          <li><strong>Pomodoro Timer:</strong> Hẹn giờ học tập hiệu quả với chu kỳ làm việc/nghỉ ngơi</li>
+          <li><strong>Thời khóa biểu:</strong> Tạo lịch học theo ngày trong tuần</li>
+          <li><strong>Phiên học theo môn:</strong> Phân bổ thời gian học cho từng môn cụ thể</li>
+          <li><strong>Tự đánh giá:</strong> Theo dõi bài tập và nhiệm vụ cần hoàn thành</li>
+          <li><strong>Thống kê:</strong> Xem tiến độ học tập qua biểu đồ và số liệu</li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 style="margin-bottom: 12px">Phím tắt:</h3>
+        <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md); color: var(--text-muted)">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px">
+            <span><i class="fas fa-keyboard"></i> Nhấn 'N'</span>
+            <span>Focus vào ô tạo nhiệm vụ mới</span>
+          </div>
+          <div style="display: flex; justify-content: space-between">
+            <span><i class="fas fa-keyboard"></i> Nhấn 'T'</span>
+            <span>Mở nhanh bộ hẹn giờ Pomodoro</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <script>
-    const qs = s => document.querySelector(s);
-    const qsa = s => document.querySelectorAll(s);
-    const nowISODate = () => new Date().toISOString().slice(0,10);
-    const dayName = d => {
-      const map = {0:'Chủ nhật',1:'Thứ 2',2:'Thứ 3',3:'Thứ 4',4:'Thứ 5',5:'Thứ 6',6:'Thứ 7'};
-      return map[d];
-    };
-
-    const KEY_TASKS = 'sm_tasks_v1';
-    const KEY_NOTES = 'sm_notes_v1';
-    const KEY_PLANS = 'sm_plans_v1';
-    const KEY_TKB = 'sm_tkb_v1';
-    const KEY_STUDY = 'sm_study_v1';
-    const KEY_SUPPORT = 'sm_support_v1';
-    const KEY_EVAL = 'sm_eval_v1';
-
+    // Core variables and initialization
+    const KEY_TASKS = 'sm_pro_tasks_v2';
+    const KEY_NOTES = 'sm_pro_notes_v2';
+    const KEY_PLANS = 'sm_pro_plans_v2';
+    const KEY_TKB = 'sm_pro_tkb_v2';
+    const KEY_STUDY = 'sm_pro_study_v2';
+    const KEY_EVAL = 'sm_pro_eval_v2';
+    const KEY_SETTINGS = 'sm_pro_settings_v2';
+    
+    // Load data from localStorage
     let tasks = JSON.parse(localStorage.getItem(KEY_TASKS) || '[]');
     let notes = localStorage.getItem(KEY_NOTES) || '';
     let plans = JSON.parse(localStorage.getItem(KEY_PLANS) || '[]');
-    let tkb = JSON.parse(localStorage.getItem(KEY_TKB) || '{}'); 
-    let studyPlan = JSON.parse(localStorage.getItem(KEY_STUDY) || '[]'); 
-    let supportLinks = JSON.parse(localStorage.getItem(KEY_SUPPORT) || 'null');
-    if(!supportLinks){
-      supportLinks = {
-        'Toán': ['https://www.youtube.com/results?search_query=c%C3%A1ch+h%E1%BB%8Dc+L%C3%BD+hi%E1%BB%87u+qu%E1%BA%A3','https://khanacademy.org'],
-        'Văn': ['https://www.youtube.com/results?search_query=c%C3%A1ch+h%E1%BB%8Dc+V%C4%83n+hi%E1%BB%87u+qu%E1%BA%A3','https://lop.vn'],
-        'Anh': ['https://www.youtube.com/results?search_query=c%C3%A1ch+h%E1%BB%8Dc+Ti%E1%BA%BFng+Anh+hi%E1%BB%87u+qu%E1%BA%A3','https://www.duolingo.com'],
-        'Lý': ['https://www.youtube.com/results?search_query=c%C3%A1ch+h%E1%BB%8Dc+L%C3%BD+hi%E1%BB%87u+qu%E1%BA%A3'],
-        'Hóa': ['https://www.youtube.com/results?search_query=c%C3%A1ch+h%E1%BB%8Dc+H%C3%B3a+hi%E1%BB%87u+qu%E1%BA%A3']
-      };
-      localStorage.setItem(KEY_SUPPORT, JSON.stringify(supportLinks));
-    }
+    let tkb = JSON.parse(localStorage.getItem(KEY_TKB) || '{}');
+    let studyPlan = JSON.parse(localStorage.getItem(KEY_STUDY) || '[]');
     let evals = JSON.parse(localStorage.getItem(KEY_EVAL) || '[]');
-
-    const taskListEl = qs('#task-list');
-    const statTotal = qs('#stat-total');
-    const statDone = qs('#stat-done');
-    const progressBar = qs('#progress-bar');
-    const tkbListEl = qs('#tkb-list');
-    const tkbFullEl = qs('#tkb-full');
-    const bannerArea = qs('#banner-area');
-
-    function saveTasks(){ localStorage.setItem(KEY_TASKS, JSON.stringify(tasks)); renderTasks(); renderStats(); renderWeekChart(); }
-    function addTask(title, date, priority, est){
-      if(!title) return alert('Hãy nhập tên nhiệm vụ.');
-      tasks.push({id:Date.now(),title, date:date||null, priority, est, done:false});
-      saveTasks();
-      qs('#task-title').value=''; qs('#task-est').value=''; qs('#task-date').value='';
-    }
-    function toggleDone(id){ tasks = tasks.map(t=> t.id===id?({...t,done:!t.done}):t); saveTasks(); }
-    function deleteTask(id){ if(!confirm('Xóa nhiệm vụ này?')) return; tasks = tasks.filter(t=>t.id!==id); saveTasks(); }
-    function editTask(id){
-      const t = tasks.find(x=>x.id===id); if(!t) return;
-      const newTitle = prompt('Sửa tên nhiệm vụ', t.title); if(newTitle!==null){ t.title=newTitle; saveTasks(); }
-    }
-    function renderTasks(filter='all'){
-      taskListEl.innerHTML='';
-      let shown = tasks.slice();
-      if(filter==='today'){
-        const today = nowISODate();
-        shown = shown.filter(t=>t.date===today);
-      } else if(filter==='high'){ shown = shown.filter(t=>t.priority==='high'); }
-      if(shown.length===0){ taskListEl.innerHTML='<div class="empty">Không có nhiệm vụ phù hợp</div>'; return }
-      shown.sort((a,b)=> (a.done - b.done) || (a.priority > b.priority ? -1 : 1));
-      for(const t of shown){
-        const div = document.createElement('div'); div.className='task';
-        const chk = document.createElement('input'); chk.type='checkbox'; chk.checked=t.done; chk.addEventListener('change',()=>toggleDone(t.id));
-        const info = document.createElement('div');
-        info.innerHTML=`<div class="title">${escapeHtml(t.title)}</div><small>${t.date? 'Hạn: '+t.date : ''} ${t.est? ' • '+escapeHtml(t.est): ''}</small>`;
-        const icons = document.createElement('div'); icons.className='icons';
-        const btnEdit = document.createElement('button'); btnEdit.className='icon-btn'; btnEdit.innerText='✏️'; btnEdit.title='Sửa'; btnEdit.addEventListener('click',()=>editTask(t.id));
-        const btnDel = document.createElement('button'); btnDel.className='icon-btn'; btnDel.innerText='🗑️'; btnDel.title='Xóa'; btnDel.addEventListener('click',()=>deleteTask(t.id));
-        icons.appendChild(btnEdit); icons.appendChild(btnDel);
-        div.appendChild(chk); div.appendChild(info); div.appendChild(icons);
-        taskListEl.appendChild(div);
-      }
-    }
-    function renderStats(){
-      const total = tasks.length; const done = tasks.filter(t=>t.done).length;
-      statTotal.innerText = total; statDone.innerText = done;
-      const pct = total===0?0:Math.round((done/total)*100);
-      progressBar.style.width = pct+'%';
-    }
-
-    function savePlans(){ localStorage.setItem(KEY_PLANS, JSON.stringify(plans)); renderPlanner(qs('#planner-date').value||nowISODate()); }
-    function addPlan(title, date, time){ if(!title) return alert('Nhập nội dung kế hoạch.'); plans.push({id:Date.now(),title,date,time}); savePlans(); qs('#plan-title').value=''; }
-    function deletePlan(id){ if(!confirm('Xóa kế hoạch?')) return; plans = plans.filter(p=>p.id!==id); savePlans(); }
-    function renderPlanner(date){
-      const el = qs('#planner-list'); el.innerHTML='';
-      const list = plans.filter(p=>p.date===date);
-      if(list.length===0) { el.innerHTML='<div class="empty">Chưa có kế hoạch cho ngày này</div>'; return }
-      list.sort((a,b)=> (a.time||'') > (b.time||'') ? 1:-1);
-      for(const p of list){
-        const d = document.createElement('div'); d.className='task';
-        d.innerHTML=`<div><div class="title">${escapeHtml(p.title)}</div><small>${p.time||''}</small></div>`;
-        const icons=document.createElement('div'); icons.className='icons';
-        const del=document.createElement('button'); del.className='icon-btn'; del.innerText='🗑️'; del.title='Xóa'; del.addEventListener('click',()=>deletePlan(p.id));
-        icons.appendChild(del); d.appendChild(icons);
-        el.appendChild(d);
-      }
-    }
-
-    const notesArea = qs('#notes-area'); notesArea.value = notes;
-    function saveNotes(){ notes = notesArea.value; localStorage.setItem(KEY_NOTES, notes); showBanner('Ghi chú đã được lưu', 2000); }
-    qs('#save-notes').addEventListener('click', saveNotes);
-    qs('#clear-notes').addEventListener('click', ()=>{ if(confirm('Xóa toàn bộ ghi chú?')){ notesArea.value=''; saveNotes(); }});
-    notesArea.addEventListener('input', ()=>{ saveNotes(); });
-
-    qs('#filter-all').addEventListener('click', ()=>{ renderTasks('all'); });
-    qs('#filter-today').addEventListener('click', ()=>{ renderTasks('today'); });
-    qs('#filter-high').addEventListener('click', ()=>{ renderTasks('high'); });
-
-    qs('#add-task').addEventListener('click', ()=>{ addTask(qs('#task-title').value, qs('#task-date').value, qs('#task-priority').value, qs('#task-est').value); });
-    qs('#add-plan').addEventListener('click', ()=>{ const d = qs('#planner-date').value || nowISODate(); addPlan(qs('#plan-title').value, d, qs('#plan-time').value); });
-    qs('#load-today').addEventListener('click', ()=>{ renderPlanner(qs('#planner-date').value || nowISODate()); });
-    qs('#planner-date').value = nowISODate();
-
-    let timerInterval = null; let timerSeconds = 25*60; let isRunning=false; let isWork=true;
-    const timerDisplay = qs('#timer-display'); const timerMode = qs('#timer-mode');
-    function updateTimerDisplay(){ const mm = Math.floor(timerSeconds/60).toString().padStart(2,'0'); const ss = (timerSeconds%60).toString().padStart(2,'0'); timerDisplay.innerText = mm+':'+ss; }
-    function startTimer(){ if(isRunning) return; isRunning=true; clearInterval(timerInterval); timerInterval=setInterval(()=>{ if(timerSeconds>0){ timerSeconds--; updateTimerDisplay(); } else { clearInterval(timerInterval); isRunning=false; isWork=!isWork; timerMode.innerText = isWork? 'Làm việc':'Nghỉ'; timerSeconds = (isWork? parseInt(qs('#work-min').value||25) : parseInt(qs('#break-min').value||5))*60; updateTimerDisplay(); beep(); notify('Study Manager', isWork? 'Bắt đầu chu kì làm việc':'Bắt đầu nghỉ ngắn'); } },1000); }
-    function pauseTimer(){ if(timerInterval) clearInterval(timerInterval); isRunning=false; }
-    function resetTimer(){ pauseTimer(); isWork=true; timerSeconds = parseInt(qs('#work-min').value||25)*60; timerMode.innerText='Làm việc'; updateTimerDisplay(); }
-    qs('#start-timer').addEventListener('click', ()=>startTimer());
-    qs('#pause-timer').addEventListener('click', ()=>pauseTimer());
-    qs('#reset-timer').addEventListener('click', ()=>resetTimer());
-    qs('#work-min').addEventListener('change', ()=>{ if(!isRunning){ timerSeconds = parseInt(qs('#work-min').value||25)*60; updateTimerDisplay(); }});
-    qs('#break-min').addEventListener('change', ()=>{ if(!isRunning && !isWork){ timerSeconds = parseInt(qs('#break-min').value||5)*60; updateTimerDisplay(); }});
-
-    function renderWeekChart(){ const el = qs('#week-chart'); el.innerHTML=''; const today = new Date();
-      for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(today.getDate()-i); const iso = d.toISOString().slice(0,10); const count = tasks.filter(t=>t.date===iso && t.done).length;
-        const bar=document.createElement('div'); bar.style.height = Math.min(80,10+count*12)+'px'; bar.style.background='linear-gradient(180deg,var(--accent),var(--accent-2))'; bar.style.borderRadius='8px'; bar.title = d.toLocaleDateString()+' — Hoàn thành: '+count; el.appendChild(bar);
-      }
-    }
-
-    function saveTKB(){ localStorage.setItem(KEY_TKB, JSON.stringify(tkb)); renderTKBList(); renderTKBFull(); }
-    qs('#add-tkb').addEventListener('click', ()=>{
-      const day = qs('#tkb-day').value; const subj = qs('#tkb-subject').value.trim(); const time = qs('#tkb-time').value;
-      if(!subj) return alert('Nhập tên môn');
-      if(!tkb[day]) tkb[day]=[];
-      tkb[day].push({id:Date.now(), subj, time});
-      qs('#tkb-subject').value=''; qs('#tkb-time').value='';
-      saveTKB();
-    });
-    function removeTKB(day,id){
-      if(!confirm('Xóa môn này khỏi thời khóa biểu?')) return;
-      tkb[day] = (tkb[day]||[]).filter(x=>x.id!==id); saveTKB();
-    }
-    function renderTKBList(){
-      tkbListEl.innerHTML='';
-      const keys = Object.keys(tkb).sort();
-      if(keys.length===0){ tkbListEl.innerHTML='<div class="small-muted">Chưa có thời khóa biểu</div>'; return; }
-      for(const k of keys){
-        const dname = dayName(Number(k));
-        const items = tkb[k]||[];
-        const wrap = document.createElement('div'); wrap.style.marginBottom='8px';
-        wrap.innerHTML = `<div style="font-weight:700">${dname}</div>`;
-        for(const it of items){
-          const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center';
-          row.innerHTML = `<div class="small-muted">${escapeHtml(it.subj)} ${it.time? ' • '+it.time:''}</div>`;
-          const del = document.createElement('button'); del.className='icon-btn'; del.innerText='🗑️'; del.addEventListener('click',()=>removeTKB(k,it.id));
-          row.appendChild(del);
-          wrap.appendChild(row);
-        }
-        tkbListEl.appendChild(wrap);
-      }
-    }
-    function renderTKBFull(){
-      tkbFullEl.innerHTML='';
-      for(let d=1; d<=6; d++){
-        const arr = tkb[d] || [];
-        const box = document.createElement('div'); box.style.marginBottom='8px';
-        box.innerHTML = `<div style="font-weight:700">${dayName(d)}</div><div class="small-muted">${arr.length? arr.map(x=>escapeHtml(x.subj)+(x.time? ' • '+x.time:'')).join('<br>') : 'Không có'}</div>`;
-        tkbFullEl.appendChild(box);
-      }
-      const sun = tkb[0]||[]; const sunBox=document.createElement('div'); sunBox.style.marginBottom='8px';
-      sunBox.innerHTML = `<div style="font-weight:700">${dayName(0)}</div><div class="small-muted">${sun.length? sun.map(x=>escapeHtml(x.subj)+(x.time? ' • '+x.time:'')).join('<br>') : 'Không có'}</div>`;
-      tkbFullEl.appendChild(sunBox);
-    }
-
-    function saveStudyPlan(){ localStorage.setItem(KEY_STUDY, JSON.stringify(studyPlan)); renderStudyPlanUI(); }
-    qs('#add-study-time').addEventListener('click', ()=>{
-      const subj = qs('#study-subject').value.trim(); const mins = parseInt(qs('#study-min').value);
-      if(!subj || !mins) return alert('Nhập môn và số phút');
-      studyPlan.push({id:Date.now(), subj, mins});
-      qs('#study-subject').value=''; qs('#study-min').value='';
-      const total = studyPlan.reduce((s,x)=>s+x.mins,0);
-      if(total < 60 || total > 240){
-        showBanner('⚠ Tổng thời gian hiện tại: '+total+' phút — yêu cầu 60–240 phút để bắt đầu phiên học', 4000, true);
-      }
-      saveStudyPlan();
-    });
-    function removeStudyItem(id){
-      studyPlan = studyPlan.filter(x=>x.id!==id); saveStudyPlan();
-    }
-    function renderStudyPlanUI(){
-      const el = qs('#study-plan'); el.innerHTML='';
-      if(studyPlan.length===0) { el.innerHTML='<div class="empty">Chưa có lịch học</div>'; return; }
-      let total = 0;
-      for(const s of studyPlan){
-        total += s.mins;
-        const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center';
-        row.innerHTML = `<div>${escapeHtml(s.subj)} — ${s.mins} phút</div>`;
-        const del = document.createElement('button'); del.className='icon-btn'; del.innerText='🗑️'; del.addEventListener('click',()=>removeStudyItem(s.id));
-        row.appendChild(del);
-        el.appendChild(row);
-      }
-      const sum = document.createElement('div'); sum.className='small-muted'; sum.style.marginTop='6px'; sum.innerText = 'Tổng: '+total+' phút';
-      el.appendChild(sum);
-      if(total < 60 || total > 240){
-        const warn = document.createElement('div'); warn.className='danger'; warn.style.marginTop='6px'; warn.innerText='Tổng thời gian phải từ 60 đến 240 phút để bắt đầu.';
-        el.appendChild(warn);
-      }
-    }
-
+    let settings = JSON.parse(localStorage.getItem(KEY_SETTINGS) || '{"theme":"dark","notifications":true}');
+    
+    // Support links data
+    const supportLinks = {
+      'Toán': [
+        {name: 'Khan Academy Toán', url: 'https://www.khanacademy.org/math'},
+        {name: 'YouTube Toán học', url: 'https://www.youtube.com/results?search_query=to%C3%A1n+h%E1%BB%8Dc'}
+      ],
+      'Văn': [
+        {name: 'Ngữ văn 12', url: 'https://loigiaihay.com/ngu-van-12-c206.html'},
+        {name: 'Văn mẫu', url: 'https://vndoc.com/van-mau/'}
+      ],
+      'Anh': [
+        {name: 'Duolingo', url: 'https://www.duolingo.com'},
+        {name: 'BBC Learning English', url: 'https://www.bbc.co.uk/learningenglish'}
+      ],
+      'Lý': [
+        {name: 'Vật lý cơ bản', url: 'https://www.youtube.com/results?search_query=v%E1%BA%ADt+l%C3%BD'},
+        {name: 'PhET Simulations', url: 'https://phet.colorado.edu/vi/'}
+      ],
+      'Hóa': [
+        {name: 'Hóa học Online', url: 'https://hoahoc24h.com'},
+        {name: 'YouTube Hóa học', url: 'https://www.youtube.com/results?search_query=h%C3%B3a+h%E1%BB%8Dc'}
+      ]
+    };
+    
+    // DOM Elements
+    const taskListEl = document.getElementById('task-list');
+    const statTotalEl = document.getElementById('stat-total');
+    const statDoneEl = document.getElementById('stat-done');
+    const statProgressEl = document.getElementById('stat-progress');
+    const progressFillEl = document.getElementById('progress-fill');
+    const progressPercentEl = document.getElementById('progress-percent');
+    const timerDisplayEl = document.getElementById('timer-display');
+    const timerModeEl = document.getElementById('timer-mode');
+    const weekChartEl = document.getElementById('week-chart');
+    const tkbListEl = document.getElementById('tkb-list');
+    const tkbFullEl = document.getElementById('tkb-full');
+    const plannerListEl = document.getElementById('planner-list');
+    const studyPlanEl = document.getElementById('study-plan');
+    const supportLinksEl = document.getElementById('support-links');
+    const evalListEl = document.getElementById('eval-list');
+    const notesAreaEl = document.getElementById('notes-area');
+    
+    // Timer variables
+    let timerInterval = null;
+    let timerSeconds = 25 * 60;
+    let isTimerRunning = false;
+    let isWorkPhase = true;
+    
+    // Study session variables
     let studyInterval = null;
     let studyIndex = 0;
     let studySeconds = 0;
-    function startStudySession(){
-      const total = studyPlan.reduce((s,x)=>s+x.mins,0);
-      if(total < 60 || total > 240) return alert('Tổng thời gian phải từ 60 đến 240 phút trước khi bắt đầu phiên học.');
-      if(studyPlan.length===0) return alert('Chưa có môn học trong lịch!');
-      studyIndex = 0;
-      startNextSubject();
-    }
-    function startNextSubject(){
-      if(studyIndex >= studyPlan.length){ showBanner('✅ Hoàn thành phiên học!', 3000); qs('#study-timer').innerText = 'Đã hoàn thành phiên học.'; notify('Study Manager', 'Phiên học đã hoàn thành'); return; }
-      const cur = studyPlan[studyIndex];
-      studySeconds = cur.mins * 60;
-      qs('#study-timer').innerText = `Đang học ${cur.subj} — ${cur.mins} phút`;
-      renderSupportLinks(cur.subj);
-      notify('Study Manager', 'Bắt đầu học: '+cur.subj+' — '+cur.mins+' phút');
-      beep();
-      clearInterval(studyInterval);
-      studyInterval = setInterval(()=>{
-        studySeconds--;
-        const mm = Math.floor(studySeconds/60); const ss = studySeconds%60;
-        qs('#study-timer').innerText = `Đang học ${cur.subj} — ${mm.toString().padStart(2,'0')}:${ss.toString().padStart(2,'0')}`;
-        if(studySeconds<=0){
-          clearInterval(studyInterval);
-          beep();
-          notify('Study Manager', 'Hoàn thành môn: '+cur.subj);
-          showBanner('⏰ Hết thời gian: '+cur.subj, 2500);
-          studyIndex++;
-          setTimeout(()=> startNextSubject(), 1200);
-        }
-      },1000);
-    }
-    function stopStudySession(){
-      if(studyInterval) clearInterval(studyInterval);
-      studyInterval = null;
-      qs('#study-timer').innerText = 'Phiên học đã dừng.';
-      showBanner('Phiên học đã dừng', 1500);
-    }
-    qs('#start-study').addEventListener('click', startStudySession);
-    qs('#stop-study').addEventListener('click', stopStudySession);
-
-    function renderSupportLinks(subj){
-      const container = qs('#support-links'); container.innerHTML='';
-      const links = supportLinks[subj] || supportLinks[guessKey(subj)] || [];
-      if(links.length===0){ container.innerHTML = `<div class="small-muted">Không có link hỗ trợ cho ${escapeHtml(subj)} — bạn có thể thêm trong code.</div>`; return; }
-      let html = `<div style="font-weight:700">Tài liệu hỗ trợ cho ${escapeHtml(subj)}:</div>`;
-      links.forEach(l=> html += `<div><a href="${l}" target="_blank">${l}</a></div>`);
-      container.innerHTML = html;
-    }
-    function guessKey(subj){
-      const keys = Object.keys(supportLinks);
-      for(const k of keys) if(subj.toLowerCase().includes(k.toLowerCase())) return k;
-      return null;
-    }
-
-    function saveEvals(){ localStorage.setItem(KEY_EVAL, JSON.stringify(evals)); renderEvals(); }
-    qs('#add-eval').addEventListener('click', ()=>{
-      const t = qs('#eval-title').value.trim(); const d = qs('#eval-date').value;
-      if(!t || !d) return alert('Nhập tên bài tập và hạn nộp.');
-      evals.push({id:Date.now(), title:t, date:d, status:'chưa'});
-      qs('#eval-title').value=''; qs('#eval-date').value='';
-      saveEvals();
-    });
-    function updateEval(id, val){ evals = evals.map(e=> e.id===id? {...e, status: val }: e ); saveEvals(); }
-    function deleteEval(id){ if(!confirm('Xóa bài tập này?')) return; evals = evals.filter(e=>e.id!==id); saveEvals(); }
-    function renderEvals(){
-      const el = qs('#eval-list'); el.innerHTML='';
-      if(evals.length===0){ el.innerHTML='<div class="small-muted">Chưa có bài tập</div>'; return; }
-      const today = nowISODate();
-      for(const e of evals){
-        const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.marginBottom='6px';
-        const left = document.createElement('div'); left.innerHTML = `<div style="font-weight:700">${escapeHtml(e.title)}</div><div class="small-muted">Hạn: ${e.date}${e.date===today? ' • Hạn hôm nay!':''}</div>`;
-        const right = document.createElement('div');
-        const sel = document.createElement('select'); sel.innerHTML = `<option value="chưa">chưa</option><option value="đang">đang</option><option value="xong">xong</option>`; sel.value = e.status; sel.addEventListener('change', ()=>updateEval(e.id, sel.value));
-        const del = document.createElement('button'); del.className='icon-btn'; del.innerText='🗑️'; del.addEventListener('click', ()=>deleteEval(e.id));
-        right.appendChild(sel); right.appendChild(del);
-        row.appendChild(left); row.appendChild(right);
-        el.appendChild(row);
-        const d1 = new Date(e.date); const tnow = new Date(); const diff = (d1 - new Date(tnow.getFullYear(),tnow.getMonth(),tnow.getDate()))/(1000*3600*24);
-        if(diff <= 1 && diff >= 0 && e.status !== 'xong'){
-          const warn = document.createElement('div'); warn.className='danger'; warn.style.fontSize='12px'; warn.innerText = '⚠ Gần đến hạn nộp!';
-          row.appendChild(warn);
-          showBanner('⚠ Bài tập gần hạn: '+e.title, 3000, true);
-        }
-      }
-    }
-
-    function showBanner(text, ms=2000, important=false){
-      const bn = document.createElement('div'); bn.className='banner'; bn.innerText = text; if(important) bn.style.border = '1px solid rgba(255,255,255,0.06)';
-      bannerArea.appendChild(bn);
-      setTimeout(()=> { try{ bn.remove(); } catch(e){} }, ms);
-    }
-    function notify(title, body){
-      if('Notification' in window && Notification.permission === 'granted'){
-        try{ new Notification(title, {body}); }catch(e){}
-      }
-    }
-
-    function beep(){
-      try{
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type = 'sine'; o.frequency.value = 880;
-        o.connect(g); g.connect(ctx.destination); g.gain.value = 0.05;
-        o.start(); setTimeout(()=>{ o.stop(); ctx.close(); }, 200);
-      }catch(e){}
-    }
-
-    function startUpScheduleNotice(){
-      const d = new Date(); const day = d.getDay(); const hour = d.getHours();
-      let showDay = day;
-      if(day === 6 && hour >= 18){
-        showDay = 1; // Monday
-      }
-      if(day === 0) showDay = 1;
-      const arr = tkb[showDay] || [];
-      if(arr.length > 0){
-        showBanner(`📅 Lịch ${dayName(showDay)}: ${arr.map(x=>x.subj).join(', ')}`, 7000);
-        notify('Study Manager', `Lịch ${dayName(showDay)}: ${arr.map(x=>x.subj).join(', ')}`);
-      } else {
-        const days = [1,2,3,4,5,6,0];
-        for(const dd of days){
-          if((tkb[dd]||[]).length > 0){
-            showBanner(`📅 Lịch sắp tới (${dayName(dd)}): ${(tkb[dd]||[]).map(x=>x.subj).join(', ')}`, 7000);
-            break;
-          }
-        }
-      }
-    }
-
-    function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c=> ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
-    renderTasks(); renderStats(); renderPlanner(qs('#planner-date').value); renderWeekChart(); updateTimerDisplay();
-    renderTKBList(); renderTKBFull(); renderStudyPlanUI(); renderEvals();
-
-    if('Notification' in window && Notification.permission !== 'granted'){
-      try{ Notification.requestPermission(); }catch(e){}
-    }
-
-    const origSaveTasks = saveTasks;
-    saveTasks = function(){ localStorage.setItem(KEY_TASKS, JSON.stringify(tasks)); renderTasks(); renderStats(); renderWeekChart(); };
-
-    window.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='n'){ qs('#task-title').focus(); }});
-
-    setTimeout(()=> startUpScheduleNotice(), 800);
-
-    setInterval(()=> {
+    let currentStudySubject = '';
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set current date
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('task-date').value = today;
+      document.getElementById('planner-date').value = today;
+      document.getElementById('eval-date').value = today;
+      
+      // Load saved notes
+      notesAreaEl.value = notes;
+      
+      // Render all components
+      renderTasks();
+      renderStats();
+      renderWeekChart();
+      renderTKBList();
+      renderTKBFull();
+      renderPlanner(today);
+      renderStudyPlan();
       renderEvals();
-    }, 60*1000);
-
-    window._sm = {tasks, plans, tkb, studyPlan, evals, supportLinks, saveTKB, saveStudyPlan, saveEvals};
-
+      updateTimerDisplay();
+      
+      // Initialize notifications
+      if (settings.notifications && 'Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+      
+      // Show welcome notification
+      setTimeout(() => {
+        showNotification('Study Manager Pro', 'Chào mừng bạn đến với hệ thống quản lý học tập thông minh!', 'success');
+      }, 1000);
+      
+      // Check for upcoming deadlines
+      checkDeadlines();
+    });
+    
+    // Event Listeners
+    // Add task
+    document.getElementById('add-task').addEventListener('click', function() {
+      const title = document.getElementById('task-title').value.trim();
+      const date = document.getElementById('task-date').value;
+      const priority = document.getElementById('task-priority').value;
+      const est = document.getElementById('task-est').value.trim();
+      
+      if (!title) {
+        showNotification('Lỗi', 'Vui lòng nhập tên nhiệm vụ', 'error');
+        return;
+      }
+      
+      addTask(title, date, priority, est);
+      document.getElementById('task-title').value = '';
+      document.getElementById('task-est').value = '';
+    });
+    
+    // Task filters
+    document.getElementById('filter-today').addEventListener('click', function() {
+      renderTasks('today');
+    });
+    
+    document.getElementById('filter-high').addEventListener('click', function() {
+      renderTasks('high');
+    });
+    
+    // Add TKB item
+    document.getElementById('add-tkb').addEventListener('click', function() {
+      const day = document.getElementById('tkb-day').value;
+      const subject = document.getElementById('tkb-subject').value.trim();
+      const time = document.getElementById('tkb-time').value;
+      
+      if (!subject) {
+        showNotification('Lỗi', 'Vui lòng nhập tên môn học', 'error');
+        return;
+      }
+      
+      addTKBItem(day, subject, time);
+      document.getElementById('tkb-subject').value = '';
+    });
+    
+    // Timer controls
+    document.getElementById('start-timer').addEventListener('click', startTimer);
+    document.getElementById('pause-timer').addEventListener('click', pauseTimer);
+    document.getElementById('reset-timer').addEventListener('click', resetTimer);
+    
+    // Study session controls
+    document.getElementById('add-study-time').addEventListener('click', function() {
+      const subject = document.getElementById('study-subject').value.trim();
+      const minutes = parseInt(document.getElementById('study-min').value);
+      
+      if (!subject || !minutes || minutes < 5) {
+        showNotification('Lỗi', 'Vui lòng nhập môn học và số phút (tối thiểu 5 phút)', 'error');
+        return;
+      }
+      
+      addStudyTime(subject, minutes);
+      document.getElementById('study-subject').value = '';
+      document.getElementById('study-min').value = '';
+    });
+    
+    document.getElementById('start-study').addEventListener('click', startStudySession);
+    document.getElementById('stop-study').addEventListener('click', stopStudySession);
+    
+    // Planner
+    document.getElementById('add-plan').addEventListener('click', function() {
+      const title = document.getElementById('plan-title').value.trim();
+      const date = document.getElementById('planner-date').value;
+      const time = document.getElementById('plan-time').value;
+      
+      if (!title) {
+        showNotification('Lỗi', 'Vui lòng nhập nội dung kế hoạch', 'error');
+        return;
+      }
+      
+      addPlan(title, date, time);
+      document.getElementById('plan-title').value = '';
+    });
+    
+    document.getElementById('load-today').addEventListener('click', function() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('planner-date').value = today;
+      renderPlanner(today);
+    });
+    
+    // Notes
+    document.getElementById('save-notes').addEventListener('click', saveNotes);
+    document.getElementById('clear-notes').addEventListener('click', function() {
+      if (confirm('Bạn có chắc chắn muốn xóa toàn bộ ghi chú?')) {
+        notesAreaEl.value = '';
+        saveNotes();
+      }
+    });
+    
+    // Self evaluation
+    document.getElementById('add-eval').addEventListener('click', function() {
+      const title = document.getElementById('eval-title').value.trim();
+      const date = document.getElementById('eval-date').value;
+      
+      if (!title || !date) {
+        showNotification('Lỗi', 'Vui lòng nhập tên bài tập và hạn nộp', 'error');
+        return;
+      }
+      
+      addEvaluation(title, date);
+      document.getElementById('eval-title').value = '';
+    });
+    
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    
+    // Help modal
+    document.getElementById('help-btn').addEventListener('click', function() {
+      document.getElementById('help-modal').classList.add('active');
+    });
+    
+    document.getElementById('close-help').addEventListener('click', function() {
+      document.getElementById('help-modal').classList.remove('active');
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.key.toLowerCase() === 'n' && !e.target.matches('input, textarea, select')) {
+        document.getElementById('task-title').focus();
+        e.preventDefault();
+      }
+      
+      if (e.key.toLowerCase() === 't' && !e.target.matches('input, textarea, select')) {
+        startTimer();
+        e.preventDefault();
+      }
+      
+      if (e.key === 'Escape') {
+        document.getElementById('help-modal').classList.remove('active');
+      }
+    });
+    
+    // Core Functions
+    function addTask(title, date, priority, est) {
+      const task = {
+        id: Date.now(),
+        title,
+        date: date || null,
+        priority,
+        est,
+        done: false,
+        createdAt: new Date().toISOString()
+      };
+      
+      tasks.push(task);
+      saveTasks();
+      
+      showNotification('Thành công', `Đã thêm nhiệm vụ: ${title}`, 'success');
+    }
+    
+    function toggleTaskDone(id) {
+      tasks = tasks.map(task => {
+        if (task.id === id) {
+          return { ...task, done: !task.done };
+        }
+        return task;
+      });
+      
+      saveTasks();
+    }
+    
+    function deleteTask(id) {
+      if (!confirm('Bạn có chắc chắn muốn xóa nhiệm vụ này?')) return;
+      
+      tasks = tasks.filter(task => task.id !== id);
+      saveTasks();
+      
+      showNotification('Thông báo', 'Đã xóa nhiệm vụ', 'info');
+    }
+    
+    function editTask(id) {
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+      
+      const newTitle = prompt('Sửa tên nhiệm vụ:', task.title);
+      if (newTitle !== null && newTitle.trim() !== '') {
+        task.title = newTitle.trim();
+        saveTasks();
+        
+        showNotification('Thành công', 'Đã cập nhật nhiệm vụ', 'success');
+      }
+    }
+    
+    function saveTasks() {
+      localStorage.setItem(KEY_TASKS, JSON.stringify(tasks));
+      renderTasks();
+      renderStats();
+      renderWeekChart();
+    }
+    
+    function renderTasks(filter = 'all') {
+      taskListEl.innerHTML = '';
+      
+      let filteredTasks = [...tasks];
+      
+      if (filter === 'today') {
+        const today = new Date().toISOString().split('T')[0];
+        filteredTasks = filteredTasks.filter(task => task.date === today);
+      } else if (filter === 'high') {
+        filteredTasks = filteredTasks.filter(task => task.priority === 'high' || task.priority === 'urgent');
+      }
+      
+      // Sort tasks: undone first, then by priority, then by date
+      filteredTasks.sort((a, b) => {
+        if (a.done !== b.done) return a.done ? 1 : -1;
+        
+        const priorityOrder = { 'urgent': 0, 'high': 1, 'medium': 2, 'low': 3 };
+        if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+          return priorityOrder[a.priority] - priorityOrder[b.priority];
+        }
+        
+        return new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31');
+      });
+      
+      if (filteredTasks.length === 0) {
+        taskListEl.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="fas fa-clipboard-list"></i>
+            </div>
+            <p>Không có nhiệm vụ nào</p>
+            <p class="text-muted" style="font-size: 14px; margin-top: 8px">
+              ${filter === 'today' ? 'Không có nhiệm vụ cho hôm nay' : 
+                filter === 'high' ? 'Không có nhiệm vụ ưu tiên cao' : 
+                'Thêm nhiệm vụ đầu tiên của bạn'}
+            </p>
+          </div>
+        `;
+        return;
+      }
+      
+      filteredTasks.forEach(task => {
+        const taskItem = document.createElement('div');
+        taskItem.className = 'task-item';
+        taskItem.dataset.id = task.id;
+        
+        const priorityClass = `priority-${task.priority}`;
+        const priorityText = {
+          'low': 'Thấp',
+          'medium': 'Trung bình',
+          'high': 'Cao',
+          'urgent': 'Khẩn cấp'
+        }[task.priority];
+        
+        const dateText = task.date ? formatDate(task.date) : 'Không hạn';
+        const estText = task.est ? ` • ${task.est}` : '';
+        
+        taskItem.innerHTML = `
+          <div class="task-checkbox ${task.done ? 'checked' : ''}">
+            ${task.done ? '<i class="fas fa-check" style="color: white; font-size: 12px"></i>' : ''}
+          </div>
+          <div class="task-content">
+            <div class="task-title" style="${task.done ? 'text-decoration: line-through; opacity: 0.7' : ''}">
+              ${escapeHtml(task.title)}
+            </div>
+            <div class="task-meta">
+              <span>${dateText}${estText}</span>
+              <span class="task-priority ${priorityClass}">${priorityText}</span>
+            </div>
+          </div>
+          <div class="task-actions">
+            <button class="action-btn edit-task" title="Sửa">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-btn delete-task" title="Xóa">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        `;
+        
+        taskListEl.appendChild(taskItem);
+        
+        // Add event listeners
+        const checkbox = taskItem.querySelector('.task-checkbox');
+        const editBtn = taskItem.querySelector('.edit-task');
+        const deleteBtn = taskItem.querySelector('.delete-task');
+        
+        checkbox.addEventListener('click', () => toggleTaskDone(task.id));
+        editBtn.addEventListener('click', () => editTask(task.id));
+        deleteBtn.addEventListener('click', () => deleteTask(task.id));
+      });
+    }
+    
+    function renderStats() {
+      const total = tasks.length;
+      const done = tasks.filter(task => task.done).length;
+      const progress = total === 0 ? 0 : Math.round((done / total) * 100);
+      
+      statTotalEl.textContent = total;
+      statDoneEl.textContent = done;
+      statProgressEl.textContent = `${progress}%`;
+      progressFillEl.style.width = `${progress}%`;
+      progressPercentEl.textContent = `${progress}%`;
+    }
+    
+    function renderWeekChart() {
+      weekChartEl.innerHTML = '';
+      
+      const dayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+      const today = new Date();
+      
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(today.getDate() - i);
+        const dateString = date.toISOString().split('T')[0];
+        
+        const doneTasks = tasks.filter(task => task.date === dateString && task.done).length;
+        const allTasks = tasks.filter(task => task.date === dateString).length;
+        
+        const height = allTasks === 0 ? 20 : 20 + (doneTasks / allTasks) * 60;
+        
+        const dayColumn = document.createElement('div');
+        dayColumn.className = 'day-column';
+        
+        const isToday = i === 0;
+        
+        dayColumn.innerHTML = `
+          <div class="day-bar" style="height: ${height}px; ${isToday ? 'background: var(--secondary);' : ''}" 
+               title="${dateString}: ${doneTasks}/${allTasks} nhiệm vụ hoàn thành">
+          </div>
+          <div class="day-label" style="${isToday ? 'color: var(--secondary); font-weight: 600' : ''}">
+            ${dayNames[date.getDay()]}
+          </div>
+        `;
+        
+        weekChartEl.appendChild(dayColumn);
+      }
+    }
+    
+    // Timer functions
+    function startTimer() {
+      if (isTimerRunning) return;
+      
+      isTimerRunning = true;
+      document.getElementById('start-timer').disabled = true;
+      document.getElementById('pause-timer').disabled = false;
+      
+      timerInterval = setInterval(() => {
+        if (timerSeconds > 0) {
+          timerSeconds--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          isTimerRunning = false;
+          
+          // Switch phase
+          isWorkPhase = !isWorkPhase;
+          
+          if (isWorkPhase) {
+            timerModeEl.textContent = 'Chu kỳ làm việc';
+            timerSeconds = parseInt(document.getElementById('work-min').value) * 60;
+            showNotification('Pomodoro', 'Bắt đầu chu kỳ làm việc mới!', 'success');
+          } else {
+            timerModeEl.textContent = 'Thời gian nghỉ';
+            timerSeconds = parseInt(document.getElementById('break-min').value) * 60;
+            showNotification('Pomodoro', 'Đã đến giờ nghỉ ngơi!', 'info');
+          }
+          
+          document.getElementById('start-timer').disabled = false;
+          updateTimerDisplay();
+          
+          // Play sound
+          playBeep();
+          
+          // Start next phase automatically after 1 second
+          setTimeout(() => {
+            if (settings.notifications) {
+              startTimer();
+            }
+          }, 1000);
+        }
+      }, 1000);
+    }
+    
+    function pauseTimer() {
+      if (!isTimerRunning) return;
+      
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      document.getElementById('start-timer').disabled = false;
+      document.getElementById('pause-timer').disabled = true;
+      
+      showNotification('Pomodoro', 'Bộ hẹn giờ đã tạm dừng', 'info');
+    }
+    
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      isWorkPhase = true;
+      
+      timerModeEl.textContent = 'Chu kỳ làm việc';
+      timerSeconds = parseInt(document.getElementById('work-min').value) * 60;
+      
+      document.getElementById('start-timer').disabled = false;
+      document.getElementById('pause-timer').disabled = true;
+      
+      updateTimerDisplay();
+    }
+    
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timerSeconds / 60);
+      const seconds = timerSeconds % 60;
+      timerDisplayEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    // TKB functions
+    function addTKBItem(day, subject, time) {
+      if (!tkb[day]) {
+        tkb[day] = [];
+      }
+      
+      tkb[day].push({
+        id: Date.now(),
+        subject,
+        time: time || '',
+        day: parseInt(day)
+      });
+      
+      saveTKB();
+      showNotification('Thành công', `Đã thêm ${subject} vào thời khóa biểu`, 'success');
+    }
+    
+    function removeTKBItem(day, id) {
+      if (!confirm('Xóa môn học này khỏi thời khóa biểu?')) return;
+      
+      if (tkb[day]) {
+        tkb[day] = tkb[day].filter(item => item.id !== id);
+        
+        if (tkb[day].length === 0) {
+          delete tkb[day];
+        }
+        
+        saveTKB();
+        showNotification('Thông báo', 'Đã xóa môn học khỏi thời khóa biểu', 'info');
+      }
+    }
+    
+    function saveTKB() {
+      localStorage.setItem(KEY_TKB, JSON.stringify(tkb));
+      renderTKBList();
+      renderTKBFull();
+    }
+    
+    function renderTKBList() {
+      tkbListEl.innerHTML = '';
+      
+      const days = Object.keys(tkb).sort((a, b) => parseInt(a) - parseInt(b));
+      
+      if (days.length === 0) {
+        tkbListEl.innerHTML = `
+          <div class="empty-state" style="padding: 20px 0">
+            <i class="fas fa-calendar-plus" style="font-size: 24px; opacity: 0.5"></i>
+            <p style="margin-top: 8px; font-size: 14px">Chưa có thời khóa biểu</p>
+          </div>
+        `;
+        return;
+      }
+      
+      days.forEach(day => {
+        const dayName = getDayName(parseInt(day));
+        const items = tkb[day];
+        
+        const dayHeader = document.createElement('div');
+        dayHeader.style.cssText = 'font-weight: 600; margin-bottom: 8px; color: var(--primary); font-size: 14px';
+        dayHeader.textContent = dayName;
+        
+        tkbListEl.appendChild(dayHeader);
+        
+        items.forEach(item => {
+          const itemEl = document.createElement('div');
+          itemEl.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-secondary); border-radius: var(--radius-sm); margin-bottom: 6px';
+          
+          itemEl.innerHTML = `
+            <div>
+              <div style="font-weight: 500">${escapeHtml(item.subject)}</div>
+              <div style="font-size: 12px; color: var(--text-muted)">${item.time || 'Chưa đặt giờ'}</div>
+            </div>
+            <button class="action-btn delete-tkb" style="width: 28px; height: 28px" title="Xóa">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+          
+          tkbListEl.appendChild(itemEl);
+          
+          // Add event listener for delete button
+          const deleteBtn = itemEl.querySelector('.delete-tkb');
+          deleteBtn.addEventListener('click', () => removeTKBItem(day, item.id));
+        });
+      });
+    }
+    
+    function renderTKBFull() {
+      tkbFullEl.innerHTML = '';
+      
+      const dayNames = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+      
+      let hasContent = false;
+      
+      for (let i = 0; i < 7; i++) {
+        const dayItems = tkb[i] || [];
+        
+        if (dayItems.length > 0) {
+          hasContent = true;
+          
+          const dayCard = document.createElement('div');
+          dayCard.style.cssText = 'background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px';
+          
+          const dayTitle = document.createElement('div');
+          dayTitle.style.cssText = 'font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px';
+          dayTitle.innerHTML = `<i class="fas fa-calendar-day"></i> ${dayNames[i]}`;
+          
+          dayCard.appendChild(dayTitle);
+          
+          dayItems.forEach(item => {
+            const itemEl = document.createElement('div');
+            itemEl.style.cssText = 'display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border)';
+            itemEl.innerHTML = `
+              <div style="font-weight: 500">${escapeHtml(item.subject)}</div>
+              <div style="color: var(--text-muted)">${item.time || ''}</div>
+            `;
+            
+            dayCard.appendChild(itemEl);
+          });
+          
+          tkbFullEl.appendChild(dayCard);
+        }
+      }
+      
+      if (!hasContent) {
+        tkbFullEl.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-calendar" style="font-size: 32px; opacity: 0.5"></i>
+            <p style="margin-top: 12px">Chưa có thời khóa biểu</p>
+            <p class="text-muted" style="font-size: 14px; margin-top: 4px">Thêm môn học vào lịch của bạn</p>
+          </div>
+        `;
+      }
+    }
+    
+    // Planner functions
+    function addPlan(title, date, time) {
+      const plan = {
+        id: Date.now(),
+        title,
+        date,
+        time: time || '',
+        completed: false
+      };
+      
+      plans.push(plan);
+      savePlans();
+      
+      renderPlanner(date);
+      showNotification('Thành công', `Đã thêm vào kế hoạch: ${title}`, 'success');
+    }
+    
+    function deletePlan(id) {
+      if (!confirm('Xóa kế hoạch này?')) return;
+      
+      plans = plans.filter(plan => plan.id !== id);
+      savePlans();
+      
+      const date = document.getElementById('planner-date').value;
+      renderPlanner(date);
+    }
+    
+    function savePlans() {
+      localStorage.setItem(KEY_PLANS, JSON.stringify(plans));
+    }
+    
+    function renderPlanner(date) {
+      plannerListEl.innerHTML = '';
+      
+      const dayPlans = plans.filter(plan => plan.date === date);
+      
+      if (dayPlans.length === 0) {
+        plannerListEl.innerHTML = `
+          <div class="empty-state" style="padding: 20px 0; min-height: 80px">
+            <i class="fas fa-calendar-day" style="font-size: 24px; opacity: 0.5"></i>
+            <p style="margin-top: 8px; font-size: 14px">Chưa có kế hoạch cho ngày này</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Sort by time
+      dayPlans.sort((a, b) => {
+        if (!a.time && !b.time) return 0;
+        if (!a.time) return 1;
+        if (!b.time) return -1;
+        return a.time.localeCompare(b.time);
+      });
+      
+      dayPlans.forEach(plan => {
+        const planEl = document.createElement('div');
+        planEl.className = 'task-item';
+        
+        planEl.innerHTML = `
+          <div class="task-checkbox ${plan.completed ? 'checked' : ''}">
+            ${plan.completed ? '<i class="fas fa-check" style="color: white; font-size: 12px"></i>' : ''}
+          </div>
+          <div class="task-content">
+            <div class="task-title" style="${plan.completed ? 'text-decoration: line-through; opacity: 0.7' : ''}">
+              ${escapeHtml(plan.title)}
+            </div>
+            <div class="task-meta">
+              ${plan.time ? `<span>${plan.time}</span>` : ''}
+            </div>
+          </div>
+          <div class="task-actions">
+            <button class="action-btn delete-plan" title="Xóa">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        `;
+        
+        plannerListEl.appendChild(planEl);
+        
+        // Add event listeners
+        const checkbox = planEl.querySelector('.task-checkbox');
+        const deleteBtn = planEl.querySelector('.delete-plan');
+        
+        checkbox.addEventListener('click', () => {
+          plan.completed = !plan.completed;
+          savePlans();
+          renderPlanner(date);
+        });
+        
+        deleteBtn.addEventListener('click', () => deletePlan(plan.id));
+      });
+    }
+    
+    // Study plan functions
+    function addStudyTime(subject, minutes) {
+      studyPlan.push({
+        id: Date.now(),
+        subject,
+        minutes,
+        completed: false
+      });
+      
+      saveStudyPlan();
+      renderStudyPlan();
+    }
+    
+    function removeStudyTime(id) {
+      studyPlan = studyPlan.filter(item => item.id !== id);
+      saveStudyPlan();
+      renderStudyPlan();
+    }
+    
+    function saveStudyPlan() {
+      localStorage.setItem(KEY_STUDY, JSON.stringify(studyPlan));
+    }
+    
+    function renderStudyPlan() {
+      studyPlanEl.innerHTML = '';
+      
+      if (studyPlan.length === 0) {
+        studyPlanEl.innerHTML = `
+          <div class="empty-state" style="padding: 16px 0">
+            <i class="fas fa-book" style="font-size: 20px; opacity: 0.5"></i>
+            <p style="margin-top: 8px; font-size: 14px">Chưa có môn học trong lịch</p>
+          </div>
+        `;
+        return;
+      }
+      
+      let totalMinutes = 0;
+      
+      studyPlan.forEach(item => {
+        totalMinutes += item.minutes;
+        
+        const itemEl = document.createElement('div');
+        itemEl.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: 8px';
+        
+        itemEl.innerHTML = `
+          <div>
+            <div style="font-weight: 500">${escapeHtml(item.subject)}</div>
+            <div style="font-size: 13px; color: var(--text-muted)">${item.minutes} phút</div>
+          </div>
+          <button class="action-btn delete-study" title="Xóa">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        
+        studyPlanEl.appendChild(itemEl);
+        
+        // Add event listener for delete button
+        const deleteBtn = itemEl.querySelector('.delete-study');
+        deleteBtn.addEventListener('click', () => removeStudyTime(item.id));
+      });
+      
+      // Add total time
+      const totalEl = document.createElement('div');
+      totalEl.style.cssText = 'text-align: center; margin-top: 12px; padding: 8px; background: var(--bg); border-radius: var(--radius-md)';
+      
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      const timeText = hours > 0 ? `${hours} giờ ${minutes} phút` : `${minutes} phút`;
+      
+      totalEl.innerHTML = `
+        <div style="font-weight: 600; color: var(--primary)">Tổng thời gian: ${timeText}</div>
+        ${totalMinutes < 60 || totalMinutes > 240 ? 
+          `<div style="font-size: 12px; color: var(--danger); margin-top: 4px">
+            <i class="fas fa-exclamation-triangle"></i> Thời gian khuyến nghị: 60-240 phút
+          </div>` : 
+          `<div style="font-size: 12px; color: var(--secondary); margin-top: 4px">
+            <i class="fas fa-check-circle"></i> Thời gian phù hợp
+          </div>`
+        }
+      `;
+      
+      studyPlanEl.appendChild(totalEl);
+    }
+    
+    function startStudySession() {
+      if (studyPlan.length === 0) {
+        showNotification('Lỗi', 'Chưa có môn học trong lịch', 'error');
+        return;
+      }
+      
+      const totalMinutes = studyPlan.reduce((sum, item) => sum + item.minutes, 0);
+      
+      if (totalMinutes < 60 || totalMinutes > 240) {
+        showNotification('Cảnh báo', 'Thời gian học nên từ 60 đến 240 phút để đạt hiệu quả tốt nhất', 'warning');
+        
+        if (!confirm(`Tổng thời gian hiện tại là ${totalMinutes} phút. Bạn có muốn tiếp tục không?`)) {
+          return;
+        }
+      }
+      
+      studyIndex = 0;
+      startNextStudySubject();
+    }
+    
+    function startNextStudySubject() {
+      if (studyIndex >= studyPlan.length) {
+        // Study session completed
+        stopStudySession();
+        showNotification('Chúc mừng', 'Hoàn thành phiên học!', 'success');
+        
+        document.getElementById('study-timer').innerHTML = `
+          <div style="color: var(--secondary)">
+            <i class="fas fa-check-circle"></i> Đã hoàn thành phiên học
+          </div>
+        `;
+        
+        // Play completion sound
+        playBeep();
+        playBeep();
+        
+        return;
+      }
+      
+      const currentSubject = studyPlan[studyIndex];
+      currentStudySubject = currentSubject.subject;
+      studySeconds = currentSubject.minutes * 60;
+      
+      // Update display
+      document.getElementById('study-timer').innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px">
+          <div style="font-weight: 600">Đang học: ${escapeHtml(currentStudySubject)}</div>
+          <div style="font-size: 18px; font-weight: 700; color: var(--primary)" id="study-time-display">
+            ${Math.floor(studySeconds / 60).toString().padStart(2, '0')}:${(studySeconds % 60).toString().padStart(2, '0')}
+          </div>
+        </div>
+      `;
+      
+      // Show support links
+      renderSupportLinks(currentStudySubject);
+      
+      // Show notification
+      showNotification('Bắt đầu học', `Môn: ${currentStudySubject} - ${currentSubject.minutes} phút`, 'info');
+      
+      // Start timer
+      clearInterval(studyInterval);
+      studyInterval = setInterval(() => {
+        studySeconds--;
+        
+        const minutes = Math.floor(studySeconds / 60);
+        const seconds = studySeconds % 60;
+        document.getElementById('study-time-display').textContent = 
+          `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (studySeconds <= 0) {
+          clearInterval(studyInterval);
+          
+          // Play sound
+          playBeep();
+          
+          // Mark as completed
+          studyPlan[studyIndex].completed = true;
+          saveStudyPlan();
+          
+          // Move to next subject
+          studyIndex++;
+          
+          // Show notification
+          showNotification('Hoàn thành', `Đã học xong ${currentStudySubject}`, 'success');
+          
+          // Start next subject after 2 seconds
+          setTimeout(() => {
+            startNextStudySubject();
+          }, 2000);
+        }
+      }, 1000);
+    }
+    
+    function stopStudySession() {
+      clearInterval(studyInterval);
+      studyInterval = null;
+      
+      document.getElementById('study-timer').innerHTML = `
+        <i class="fas fa-hourglass-start" style="margin-right: 8px"></i>
+        <span>Chưa có phiên học đang chạy</span>
+      `;
+      
+      supportLinksEl.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-link" style="font-size: 24px; opacity: 0.5"></i>
+          <p style="margin-top: 8px">Chưa có liên kết hỗ trợ</p>
+          <p class="text-muted" style="font-size: 14px; margin-top: 4px">Bắt đầu phiên học để xem tài liệu</p>
+        </div>
+      `;
+      
+      if (currentStudySubject) {
+        showNotification('Đã dừng', `Đã dừng phiên học ${currentStudySubject}`, 'info');
+        currentStudySubject = '';
+      }
+    }
+    
+    function renderSupportLinks(subject) {
+      supportLinksEl.innerHTML = '';
+      
+      // Try to find matching subject
+      let matchingKey = null;
+      const subjectLower = subject.toLowerCase();
+      
+      for (const key in supportLinks) {
+        if (subjectLower.includes(key.toLowerCase()) || key.toLowerCase().includes(subjectLower)) {
+          matchingKey = key;
+          break;
+        }
+      }
+      
+      if (!matchingKey) {
+        // Default to first subject in study plan
+        matchingKey = studyPlan.length > 0 ? studyPlan[0].subject : 'Toán';
+      }
+      
+      const links = supportLinks[matchingKey] || supportLinks['Toán'];
+      
+      const title = document.createElement('div');
+      title.style.cssText = 'font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px';
+      title.innerHTML = `<i class="fas fa-external-link-alt"></i> Tài liệu hỗ trợ cho ${escapeHtml(matchingKey)}`;
+      
+      supportLinksEl.appendChild(title);
+      
+      links.forEach(link => {
+        const linkEl = document.createElement('a');
+        linkEl.href = link.url;
+        linkEl.target = '_blank';
+        linkEl.style.cssText = 'display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: 8px; text-decoration: none; color: var(--text); transition: var(--transition)';
+        linkEl.innerHTML = `
+          <div style="width: 36px; height: 36px; border-radius: 8px; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white">
+            <i class="fas fa-external-link-alt"></i>
+          </div>
+          <div>${escapeHtml(link.name)}</div>
+        `;
+        
+        linkEl.addEventListener('mouseenter', () => {
+          linkEl.style.background = 'var(--primary)';
+          linkEl.style.color = 'white';
+          linkEl.style.transform = 'translateX(4px)';
+        });
+        
+        linkEl.addEventListener('mouseleave', () => {
+          linkEl.style.background = 'var(--bg-secondary)';
+          linkEl.style.color = 'var(--text)';
+          linkEl.style.transform = 'translateX(0)';
+        });
+        
+        supportLinksEl.appendChild(linkEl);
+      });
+    }
+    
+    // Evaluation functions
+    function addEvaluation(title, date) {
+      const evaluation = {
+        id: Date.now(),
+        title,
+        date,
+        status: 'pending', // pending, in-progress, completed
+        createdAt: new Date().toISOString()
+      };
+      
+      evals.push(evaluation);
+      saveEvals();
+      
+      renderEvals();
+      showNotification('Thành công', `Đã thêm bài tập: ${title}`, 'success');
+    }
+    
+    function updateEvaluationStatus(id, status) {
+      evals = evals.map(eval => {
+        if (eval.id === id) {
+          return { ...eval, status };
+        }
+        return eval;
+      });
+      
+      saveEvals();
+      renderEvals();
+    }
+    
+    function deleteEvaluation(id) {
+      if (!confirm('Xóa bài tập này?')) return;
+      
+      evals = evals.filter(eval => eval.id !== id);
+      saveEvals();
+      renderEvals();
+    }
+    
+    function saveEvals() {
+      localStorage.setItem(KEY_EVAL, JSON.stringify(evals));
+    }
+    
+    function renderEvals() {
+      evalListEl.innerHTML = '';
+      
+      if (evals.length === 0) {
+        evalListEl.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-clipboard" style="font-size: 24px; opacity: 0.5"></i>
+            <p style="margin-top: 8px">Chưa có bài tập</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Sort by date (closest first)
+      const sortedEvals = [...evals].sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      sortedEvals.forEach(eval => {
+        const evalEl = document.createElement('div');
+        evalEl.style.cssText = 'background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px';
+        
+        const daysLeft = Math.ceil((new Date(eval.date) - new Date()) / (1000 * 60 * 60 * 24));
+        let daysText = '';
+        let daysClass = '';
+        
+        if (daysLeft < 0) {
+          daysText = 'Quá hạn';
+          daysClass = 'danger';
+        } else if (daysLeft === 0) {
+          daysText = 'Hôm nay';
+          daysClass = 'warning';
+        } else if (daysLeft === 1) {
+          daysText = '1 ngày nữa';
+          daysClass = 'warning';
+        } else if (daysLeft <= 3) {
+          daysText = `${daysLeft} ngày nữa`;
+          daysClass = 'warning';
+        } else {
+          daysText = `${daysLeft} ngày nữa`;
+          daysClass = 'success';
+        }
+        
+        const statusOptions = [
+          { value: 'pending', label: 'Chưa bắt đầu', color: 'var(--text-muted)' },
+          { value: 'in-progress', label: 'Đang làm', color: 'var(--warning)' },
+          { value: 'completed', label: 'Đã hoàn thành', color: 'var(--secondary)' }
+        ];
+        
+        const currentStatus = statusOptions.find(opt => opt.value === eval.status);
+        
+        evalEl.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px">
+            <div style="font-weight: 600">${escapeHtml(eval.title)}</div>
+            <div style="font-size: 12px; padding: 4px 8px; border-radius: 12px; background: ${currentStatus.color}; color: white">
+              ${currentStatus.label}
+            </div>
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px">
+            <div style="font-size: 14px; color: var(--text-muted)">
+              <i class="far fa-calendar-alt" style="margin-right: 6px"></i>
+              Hạn nộp: ${formatDate(eval.date)}
+            </div>
+            <div style="font-size: 14px; color: var(--${daysClass})">
+              ${daysText}
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 8px">
+            <select class="input" style="flex: 1; padding: 8px 12px; font-size: 14px" data-id="${eval.id}">
+              ${statusOptions.map(opt => 
+                `<option value="${opt.value}" ${eval.status === opt.value ? 'selected' : ''}>${opt.label}</option>`
+              ).join('')}
+            </select>
+            <button class="action-btn delete-eval" data-id="${eval.id}" title="Xóa">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        `;
+        
+        evalListEl.appendChild(evalEl);
+        
+        // Add event listeners
+        const select = evalEl.querySelector('select');
+        const deleteBtn = evalEl.querySelector('.delete-eval');
+        
+        select.addEventListener('change', function() {
+          updateEvaluationStatus(parseInt(this.dataset.id), this.value);
+        });
+        
+        deleteBtn.addEventListener('click', function() {
+          deleteEvaluation(parseInt(this.dataset.id));
+        });
+      });
+    }
+    
+    // Notes functions
+    function saveNotes() {
+      notes = notesAreaEl.value;
+      localStorage.setItem(KEY_NOTES, notes);
+      showNotification('Thành công', 'Đã lưu ghi chú', 'success');
+    }
+    
+    // Theme functions
+    function toggleTheme() {
+      const themeToggle = document.getElementById('theme-toggle');
+      const icon = themeToggle.querySelector('i');
+      
+      if (settings.theme === 'dark') {
+        settings.theme = 'light';
+        document.documentElement.style.setProperty('--bg', '#f8fafc');
+        document.documentElement.style.setProperty('--bg-card', '#ffffff');
+        document.documentElement.style.setProperty('--bg-secondary', '#f1f5f9');
+        document.documentElement.style.setProperty('--text', '#1e293b');
+        document.documentElement.style.setProperty('--text-muted', '#64748b');
+        document.documentElement.style.setProperty('--border', 'rgba(0,0,0,0.08)');
+        icon.className = 'fas fa-sun';
+        
+        showNotification('Giao diện', 'Đã chuyển sang chế độ sáng', 'info');
+      } else {
+        settings.theme = 'dark';
+        document.documentElement.style.setProperty('--bg', '#0a0f1a');
+        document.documentElement.style.setProperty('--bg-card', '#111827');
+        document.documentElement.style.setProperty('--bg-secondary', '#1e293b');
+        document.documentElement.style.setProperty('--text', '#f1f5f9');
+        document.documentElement.style.setProperty('--text-muted', '#94a3b8');
+        document.documentElement.style.setProperty('--border', 'rgba(255,255,255,0.08)');
+        icon.className = 'fas fa-moon';
+        
+        showNotification('Giao diện', 'Đã chuyển sang chế độ tối', 'info');
+      }
+      
+      localStorage.setItem(KEY_SETTINGS, JSON.stringify(settings));
+    }
+    
+    // Utility functions
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    }
+    
+    function getDayName(dayNumber) {
+      const days = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+      return days[dayNumber] || 'Không xác định';
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function showNotification(title, message, type = 'info') {
+      if (!settings.notifications) return;
+      
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      
+      const icon = type === 'success' ? 'fa-check-circle' : 
+                   type === 'error' ? 'fa-exclamation-circle' : 
+                   type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+      
+      const color = type === 'success' ? 'var(--secondary)' : 
+                    type === 'error' ? 'var(--danger)' : 
+                    type === 'warning' ? 'var(--warning)' : 'var(--primary)';
+      
+      notification.innerHTML = `
+        <div style="display: flex; align-items: flex-start; gap: 12px">
+          <div style="color: ${color}; font-size: 20px">
+            <i class="fas ${icon}"></i>
+          </div>
+          <div>
+            <div class="notification-title">${escapeHtml(title)}</div>
+            <div class="notification-content">${escapeHtml(message)}</div>
+          </div>
+        </div>
+      `;
+      
+      // Add to container
+      const container = document.getElementById('notification-container');
+      container.appendChild(notification);
+      
+      // Show notification
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 10);
+      
+      // Remove after 5 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 5000);
+      
+      // Also show browser notification if permitted
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, { body: message });
+      }
+    }
+    
+    function playBeep() {
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      } catch (e) {
+        console.log('Audio not supported');
+      }
+    }
+    
+    function checkDeadlines() {
+      const today = new Date().toISOString().split('T')[0];
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowString = tomorrow.toISOString().split('T')[0];
+      
+      // Check tasks due today
+      const tasksDueToday = tasks.filter(task => task.date === today && !task.done);
+      if (tasksDueToday.length > 0) {
+        showNotification('Nhiệm vụ hôm nay', `Bạn có ${tasksDueToday.length} nhiệm vụ cần hoàn thành hôm nay`, 'warning');
+      }
+      
+      // Check evaluations due today or tomorrow
+      const evalsDueSoon = evals.filter(eval => {
+        const daysLeft = Math.ceil((new Date(eval.date) - new Date()) / (1000 * 60 * 60 * 24));
+        return daysLeft >= 0 && daysLeft <= 2 && eval.status !== 'completed';
+      });
+      
+      if (evalsDueSoon.length > 0) {
+        showNotification('Bài tập sắp đến hạn', `Bạn có ${evalsDueSoon.length} bài tập sắp đến hạn`, 'warning');
+      }
+    }
+    
+    // Auto-save notes
+    let notesSaveTimeout;
+    notesAreaEl.addEventListener('input', function() {
+      clearTimeout(notesSaveTimeout);
+      notesSaveTimeout = setTimeout(saveNotes, 1000);
+    });
+    
+    // Initialize tooltips
+    function initTooltips() {
+      const tooltipElements = document.querySelectorAll('[title]');
+      tooltipElements.forEach(el => {
+        el.addEventListener('mouseenter', function(e) {
+          const tooltip = document.createElement('div');
+          tooltip.textContent = this.title;
+          tooltip.style.cssText = 'position: absolute; background: var(--bg-card); color: var(--text); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 14px; z-index: 1000; box-shadow: var(--shadow); border: 1px solid var(--border)';
+          document.body.appendChild(tooltip);
+          
+          const rect = this.getBoundingClientRect();
+          tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + 'px';
+          tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
+          
+          this._tooltip = tooltip;
+        });
+        
+        el.addEventListener('mouseleave', function() {
+          if (this._tooltip) {
+            this._tooltip.remove();
+            this._tooltip = null;
+          }
+        });
+      });
+    }
+    
+    // Initialize tooltips after page load
+    setTimeout(initTooltips, 1000);
+    
+    // Export all data
+    document.getElementById('export-btn').addEventListener('click', function() {
+      const data = {
+        tasks,
+        notes,
+        plans,
+        tkb,
+        studyPlan,
+        evals,
+        settings,
+        exportedAt: new Date().toISOString()
+      };
+      
+      const dataStr = JSON.stringify(data, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      
+      const url = URL.createObjectURL(dataBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `study-manager-backup-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showNotification('Xuất dữ liệu', 'Đã xuất toàn bộ dữ liệu thành công', 'success');
+    });
   </script>
 </body>
 </html>
