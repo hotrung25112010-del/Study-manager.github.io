@@ -683,9 +683,6 @@
         <button class="btn-icon" id="theme-toggle" title="Đổi giao diện">
           <i class="fas fa-moon"></i>
         </button>
-        <button class="btn-icon" id="export-btn" title="Xuất dữ liệu">
-          <i class="fas fa-download"></i>
-        </button>
         <button class="btn-icon" id="help-btn" title="Trợ giúp">
           <i class="fas fa-question-circle"></i>
         </button>
@@ -1159,21 +1156,6 @@
         {name: 'YouTube Hóa học', url: 'https://www.youtube.com/results?search_query=h%C3%B3a+h%E1%BB%8Dc'}
       ]
     };
-    <div class="card slide-in" style="margin-top: 24px">
-  <div class="card-header">
-    <h2 class="card-title">
-      <i class="fas fa-folder-open"></i> Kho lưu trữ file
-    </h2>
-  </div>
-
-  <input type="file" id="fileInput" class="input" />
-  <button class="btn btn-primary" style="margin-top:12px" id="saveFileBtn">
-    <i class="fas fa-save"></i> Lưu file
-  </button>
-
-  <div id="fileList" style="margin-top:16px"></div>
-</div>
-
     
     // DOM Elements
     const taskListEl = document.getElementById('task-list');
@@ -2490,145 +2472,6 @@
       
       showNotification('Xuất dữ liệu', 'Đã xuất toàn bộ dữ liệu thành công', 'success');
     });
-    /* ===============================
-   INDEXED DB – FILE STORAGE
-================================ */
-
-let fileDB;
-const FILE_DB_NAME = 'StudyManager_FileDB';
-const FILE_STORE = 'files';
-
-/* INIT DATABASE */
-(function initFileDB() {
-  const request = indexedDB.open(FILE_DB_NAME, 1);
-
-  request.onupgradeneeded = e => {
-    fileDB = e.target.result;
-    if (!fileDB.objectStoreNames.contains(FILE_STORE)) {
-      fileDB.createObjectStore(FILE_STORE, { keyPath: 'id' });
-    }
-  };
-
-  request.onsuccess = e => {
-    fileDB = e.target.result;
-    loadStoredFiles();
-  };
-
-  request.onerror = () => {
-    alert('IndexedDB không khả dụng trên trình duyệt này');
-  };
-})();
-
-/* SAVE FILE */
-document.getElementById('saveFileBtn').addEventListener('click', () => {
-  const input = document.getElementById('fileInput');
-  if (!input.files.length) {
-    showNotification('Lỗi', 'Vui lòng chọn file', 'error');
-    return;
-  }
-
-  const file = input.files[0];
-
-  const tx = fileDB.transaction(FILE_STORE, 'readwrite');
-  const store = tx.objectStore(FILE_STORE);
-
-  store.add({
-    id: Date.now(),
-    name: file.name,
-    type: file.type,
-    size: file.size,
-    blob: file,
-    createdAt: new Date().toISOString()
-  });
-
-  tx.oncomplete = () => {
-    input.value = '';
-    loadStoredFiles();
-    showNotification('Thành công', 'File đã được lưu', 'success');
-  };
-});
-
-/* LOAD FILE LIST */
-function loadStoredFiles() {
-  const list = document.getElementById('fileList');
-  list.innerHTML = '';
-
-  const tx = fileDB.transaction(FILE_STORE, 'readonly');
-  const store = tx.objectStore(FILE_STORE);
-
-  store.openCursor().onsuccess = e => {
-    const cursor = e.target.result;
-    if (!cursor) {
-      if (!list.innerHTML) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-folder" style="font-size:24px;opacity:.5"></i>
-            <p style="margin-top:8px">Chưa có file nào</p>
-          </div>`;
-      }
-      return;
-    }
-
-    const f = cursor.value;
-
-    const item = document.createElement('div');
-    item.style.cssText = `
-      background: var(--bg-secondary);
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    `;
-
-    item.innerHTML = `
-      <div>
-        <div style="font-weight:600">${f.name}</div>
-        <div style="font-size:12px;color:var(--text-muted)">
-          ${(f.size / 1024).toFixed(1)} KB
-        </div>
-      </div>
-      <div style="display:flex;gap:8px">
-        <button class="action-btn download">
-          <i class="fas fa-download"></i>
-        </button>
-        <button class="action-btn delete">
-          <i class="fas fa-trash"></i>
-        </button>
-      </div>
-    `;
-
-    /* DOWNLOAD */
-    item.querySelector('.download').onclick = () => {
-      const url = URL.createObjectURL(f.blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = f.name;
-      a.click();
-      URL.revokeObjectURL(url);
-    };
-
-    /* DELETE */
-    item.querySelector('.delete').onclick = () => {
-      deleteStoredFile(f.id);
-    };
-
-    list.appendChild(item);
-    cursor.continue();
-  };
-}
-
-/* DELETE FILE */
-function deleteStoredFile(id) {
-  const tx = fileDB.transaction(FILE_STORE, 'readwrite');
-  tx.objectStore(FILE_STORE).delete(id);
-
-  tx.oncomplete = () => {
-    loadStoredFiles();
-    showNotification('Thông báo', 'Đã xóa file', 'info');
-  };
-}s
   </script>
 </body>
 </html>
