@@ -814,6 +814,18 @@
           </div>
         </div>
       </div>
+            <!-- FILE STORAGE (DÁN TỪ DÒNG NÀY) -->
+              <div class="card slide-in" style="margin-top: 24px">
+                  <div class="card-header">
+                     <h2 class="card-title">
+                       <i class="fas fa-folder-open"></i> Kho lưu trữ file
+                    </h2>
+                  </div>
+
+                  <input type="file" id="fileInput" class="input" />
+                  <button class="btn btn-primary" id="saveFileBtn">Lưu file</button>
+                  <div id="fileList"></div>
+              </div>
       
       <!-- Center Column: Main Dashboard -->
       <div>
@@ -1159,21 +1171,6 @@
         {name: 'YouTube Hóa học', url: 'https://www.youtube.com/results?search_query=h%C3%B3a+h%E1%BB%8Dc'}
       ]
     };
-    <div class="card slide-in" style="margin-top: 24px">
-  <div class="card-header">
-    <h2 class="card-title">
-      <i class="fas fa-folder-open"></i> Kho lưu trữ file
-    </h2>
-  </div>
-
-  <input type="file" id="fileInput" class="input" />
-  <button class="btn btn-primary" style="margin-top:12px" id="saveFileBtn">
-    <i class="fas fa-save"></i> Lưu file
-  </button>
-
-  <div id="fileList" style="margin-top:16px"></div>
-</div>
-
     
     // DOM Elements
     const taskListEl = document.getElementById('task-list');
